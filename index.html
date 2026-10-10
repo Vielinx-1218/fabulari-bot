@@ -19,7 +19,6 @@
   <style>
     :root {
       --bg: #090910;
-      --surface: rgba(18, 18, 30, 0.72);
       --card: rgba(21, 21, 34, 0.65);
       --border: rgba(255, 255, 255, 0.1);
       --text: #eeedf7;
@@ -46,6 +45,7 @@
 
     body {
       margin: 0;
+      height: 100vh;
       height: 100svh;
       display: flex;
       flex-direction: column;
@@ -105,7 +105,7 @@
       justify-content: space-between;
       gap: 24px;
       border-bottom: 1px solid var(--border);
-      background: rgba(18, 18, 30, 0.4);
+      background: rgba(18, 18, 30, 0.5);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       flex: 0 0 auto;
@@ -229,15 +229,16 @@
     .cyan { background: linear-gradient(135deg, #31e4e8, #2788f1); }
     .orange { background: linear-gradient(135deg, #ffc15c, #ff547c); }
 
-    /* Main chat container */
+    /* Main chat section taking full width/height without card borders */
     .chat {
       width: min(960px, 100%);
-      min-height: 0;
-      margin: auto;
-      padding: 20px 24px;
+      height: 100%;
+      margin: 0 auto;
+      padding: 16px 24px;
       flex: 1;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
 
     .toolbar {
@@ -245,7 +246,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 16px;
-      padding-bottom: 20px;
+      padding-bottom: 16px;
       flex: 0 0 auto;
     }
 
@@ -293,7 +294,7 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-      padding: 4px 4px 20px;
+      padding: 4px 4px 16px;
       overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: #393448 transparent;
@@ -429,7 +430,7 @@
       animation-delay: 0.28s;
     }
 
-    .composer { flex: 0 0 auto; padding-top: 8px; }
+    .composer { flex: 0 0 auto; padding-bottom: 16px; }
 
     .input-shell {
       display: flex;
@@ -489,7 +490,7 @@
       display: flex;
       justify-content: space-between;
       gap: 16px;
-      padding-top: 10px;
+      padding-top: 8px;
       color: #80798f;
       font-size: 11px;
     }
@@ -521,7 +522,7 @@
       .themes { gap: 3px; }
       .theme { padding: 5px; }
       .theme-name { display: none; }
-      .chat { width: 100%; padding: 16px; }
+      .chat { width: 100%; padding: 12px 16px; }
       .keyboard-hint { display: none; }
     }
   </style>
@@ -650,7 +651,6 @@
     const userInput = document.getElementById('userInput');
     const typingIndicator = document.getElementById('typingIndicator');
 
-    // Theme Switcher Logic
     function setTheme(themeName, btn) {
       document.body.className = '';
       if (themeName !== 'purple') {
@@ -667,13 +667,11 @@
       btn.querySelector('.swatch').textContent = '✓';
     }
 
-    // Mode Switcher Logic
     function setMode(btn) {
       document.querySelectorAll('.mode').forEach(m => m.classList.remove('active'));
       btn.classList.add('active');
     }
 
-    // Clear Chat Logic
     function clearChat() {
       messagesContainer.innerHTML = `
         <article class="message assistant welcome" aria-label="Fabulari">
@@ -683,7 +681,6 @@
       `;
     }
 
-    // Copy Text Logic
     function copyText(btn) {
       const text = btn.previousElementSibling.textContent;
       navigator.clipboard.writeText(text).then(() => {
@@ -693,12 +690,10 @@
       });
     }
 
-    // Scroll to bottom helper
     function scrollToBottom() {
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
-    // Append Message to UI
     function appendMessage(htmlContent, senderClass) {
       const article = document.createElement('article');
       article.className = `message ${senderClass}`;
@@ -707,7 +702,6 @@
       scrollToBottom();
     }
 
-    // Handle Sending Messages & Simulated AI Response
     function handleSend() {
       const text = userInput.value.trim();
       if (!text) return;
