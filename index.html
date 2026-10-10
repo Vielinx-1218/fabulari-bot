@@ -8,7 +8,7 @@
 
   <!-- Fallback / Direct Data URI Favicon to guarantee browser tab icon loads -->
  <link rel="icon" type="image/png" sizes="32x32" href="fabulari-icon.png">
-<link rel="shortcut icon" href="fabulari-icon.png">
+
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -746,28 +746,7 @@
       scrollToBottom();
     }
 
-    function handleSend() {
-      const text = userInput.value.trim();
-      if (!text) return;
-
-      const hero = document.getElementById('welcomeHero');
-      if (hero) hero.remove();
-
-      appendMessage(`<p>${escapeHtml(text)}</p>`, 'user');
-      userInput.value = '';
-      userInput.style.height = '28px';
-
-      messagesContainer.appendChild(typingIndicator);
-      typingIndicator.classList.add('active');
-      scrollToBottom();
-
-      setTimeout(() => {
-        typingIndicator.classList.remove('active');
-        
-        const botReply = `<p>That sounds wonderful! Here is a great way to phrase that: "${escapeHtml(text)}" ✨</p>`;
-        appendMessage(botReply, 'assistant');
-      }, 1200);
-    }
+ 
 
     function escapeHtml(string) {
       return string.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
