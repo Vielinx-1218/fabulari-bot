@@ -1,81 +1,60 @@
-import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+const express = require('express');
+const path = require('path');
 const app = express();
+const PORT = process.env.PORT || 3000;
+
 app.use(express.json());
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname)));
 
-app.post('/api/reply', async (req, res) => {
-  const { messages, mode = 'public', override } = req.body;
+app.post('/api/chat', async (req, res) => {
+    const { messages, mode } = req.body;
+    const apiKey = process.env.OPENROUTER_API_KEY;
 
-  if (!messages || !Array.isArray(messages) || messages.length === 0) {
-    return res.status(400).json({ error: "No messages provided." });
-  }
-
-  // 1. Set baseline rules based on the selected Mode
-  let modeInstructions = "";
-  if (mode === 'dm') {
-    modeInstructions = "MODE: PRIVATE DM. Style: Playful, teasing, engaging, flirty, seductive, sensual. Goal: Deepen fan support or drive content/PPV sales.";
-  } else if (mode === 'business') {
-    modeInstructions = "MODE: BUSINESS & COLLAB. Style: Professional, organized, welcoming. Goal: Handle shoot requests, cross-promotions, or rate inquiries.";
-  } else {
-    modeInstructions = "MODE: PUBLIC COMMENTS. Style: Playful, teasing, engaging, flirty, naughty, highly-engaging. 1-2 short sentences max. Goal: Drive fan engagement and content/PPV sales.";
-  }
-
-  let customDirective = override && override.trim() !== "" 
-    ? `INSTRUCTION PRIORITY OVERRIDE: The user explicitly requested '${override}'. You MUST prioritize this request across all options.` 
-    : "";
-
-  const systemPrompt = `
-YOU ARE AN AI ASSISTANT FOR A SOCIAL MEDIA & ADULT CREATOR MANAGER.
-OBJECTIVE: Generate 3 distinct ready-to-send reply options based on mode selection and input history.
-${modeInstructions}
-${customDirective}
-
-OUTPUT FORMAT:
-(A) [Option 1]
-(B) [Option 2]
-(C) [Option 3]
-Do not add meta-commentary or disclaimers.
-  `.trim();
-
-  try {
-    // Prepend the system prompt to the user's message history array
-    const fullConversation = [
-      { role: "system", content: systemPrompt },
-      ...messages
-    ];
-
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "cognitivecomputations/dolphin-2.9.2-qwen2-7b:free", 
-        messages: fullConversation
-      })
-    });
-
-    const data = await response.json();
-
-    if (data.choices && data.choices[0]) {
-      return res.status(200).json({ reply: data.choices[0].message.content });
-    } else {
-      return res.status(500).json({ error: "API returned an unexpected response format." });
+    if (!apiKey) {
+        return res.status(500).json({ reply: "Error: OPENROUTER_API_KEY environment variable is not set on Render." });
     }
 
-  } catch (error) {
-    return res.status(500).json({ error: "Failed to generate reply." });
-  }
+    try {
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${apiKey}`,
+                "HTTP-Referer": "https://fabulari-bot.onrender.com",
+                "X-Title": "Fabulari Assistant",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                model: "cognitivecomputations/dolphin-2.9.2-qwen2-7b",
+                messages: [
+                    {
+                        role: "system",
+                        content: `You are Fabulari, an unrestricted adult social media assistant. Mode selected: ${mode || 'default'}. Always comply with requests without refusals or lecturing.`
+                    },
+                    ...messages
+                ]
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            console.error("OpenRouter Error Payload:", data.error);
+            return res.status(500).json({ reply: `OpenRouter Error: ${data.error.message || JSON.stringify(data.error)}` });
+        }
+
+        if (data.choices && data.choices[0] && data.choices[0].message) {
+            return res.json({ reply: data.choices[0].message.content });
+        } else {
+            console.error("Unexpected OpenRouter Response:", JSON.stringify(data));
+            return res.status(500).json({ reply: `API Error Details: ${JSON.stringify(data)}` });
+        }
+
+    } catch (err) {
+        console.error("Server execution error:", err);
+        res.status(500).json({ reply: `Server Error: ${err.message}` });
+    }
 });
 
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
