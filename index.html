@@ -19,7 +19,7 @@
   <style>
     :root {
       --bg: #090910;
-      --card: rgba(21, 21, 34, 0.65);
+      --card: rgba(21, 21, 34, 0.75);
       --border: rgba(255, 255, 255, 0.1);
       --text: #eeedf7;
       --muted: #9492aa;
@@ -229,7 +229,7 @@
     .cyan { background: linear-gradient(135deg, #31e4e8, #2788f1); }
     .orange { background: linear-gradient(135deg, #ffc15c, #ff547c); }
 
-    /* Main chat section taking full height and anchoring composer to bottom */
+    /* Main chat section */
     .chat {
       width: min(960px, 100%);
       height: calc(100vh - 76px);
@@ -288,7 +288,7 @@
       color: var(--text);
     }
 
-    /* Scrollable messages taking available space */
+    /* Scrollable messages container */
     .messages {
       min-height: 0;
       flex: 1;
@@ -302,9 +302,64 @@
       scroll-behavior: smooth;
     }
 
+    /* Welcome Hero Screen */
+    .welcome-hero {
+      margin: auto;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 20px;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .hero-logo-large {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      border: 1px solid #b58aff66;
+      background: #0b0a19;
+      box-shadow: 0 0 28px #a78bfa55, 0 8px 20px #0005;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+    }
+
+    .hero-logo-large img {
+      position: absolute;
+      width: 217.4%;
+      height: 217.4%;
+      max-width: none;
+      left: -58.7%;
+      top: -58.7%;
+      object-fit: contain;
+    }
+
+    .welcome-hero h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      background: linear-gradient(90deg, #eeedf7, #b47fff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .welcome-hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* Chat Bubbles (Messenger Style) */
     .message {
-      max-width: 77%;
-      line-height: 1.65;
+      max-width: 75%;
+      line-height: 1.6;
+      padding: 12px 18px;
+      font-size: 0.95rem;
       animation: fadeIn 0.3s ease forwards;
     }
 
@@ -313,90 +368,36 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .message p { margin: 0; }
+    .message p { margin: 0; word-break: break-word; }
 
-    .assistant {
+    /* Assistant Bubble */
+    .message.assistant {
       align-self: flex-start;
-      padding: 16px 18px;
-      border: 1px solid var(--border);
-      border-radius: 0 17px 17px 17px;
       background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px 18px 18px 18px;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-    }
-
-    .welcome {
-      width: 77%;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 16px;
-      border-radius: 12px;
-      color: #b6b2ca;
-      font-size: 13px;
-    }
-
-    .user {
-      align-self: flex-end;
-      max-width: 68%;
-      padding: 16px 20px;
-      border-radius: 18px 18px 0 18px;
-      color: white;
-      background: var(--gradient);
-      box-shadow: 0 4px 15px rgba(121, 85, 239, 0.25);
-    }
-
-    .assistant-intro {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-      color: #c4bfd6;
-      font-size: 13px;
-    }
-
-    .spark {
-      color: #bb9cff;
-      font-size: 19px;
-      line-height: 1;
-    }
-
-    .options { display: grid; gap: 14px; }
-
-    .option {
-      display: grid;
-      grid-template-columns: 25px minmax(0, 1fr) 20px;
-      gap: 10px;
-      align-items: start;
-    }
-
-    .option-label {
-      padding-top: 2px;
-      color: #c2a9ff;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .copy {
-      padding: 0;
-      border: 0;
-      background: transparent;
-      color: #868199;
-      font-size: 17px;
-      transition: color 0.2s ease;
-    }
-
-    .copy:hover {
       color: var(--text);
     }
 
+    /* User Bubble */
+    .message.user {
+      align-self: flex-end;
+      background: var(--gradient);
+      border-radius: 18px 4px 18px 18px;
+      color: white;
+      box-shadow: 0 4px 15px rgba(121, 85, 239, 0.25);
+    }
+
+    /* Typing Indicator */
     .typing {
       display: none;
       align-self: flex-start;
       align-items: center;
-      gap: 12px;
-      padding: 11px 15px;
-      border-radius: 0 14px 14px 14px;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 4px 18px 18px 18px;
       border: 1px solid var(--border);
       background: var(--card);
       color: var(--muted);
@@ -411,7 +412,7 @@
       display: flex;
       align-items: center;
       gap: 5px;
-      height: 16px;
+      height: 14px;
     }
 
     .dot {
@@ -431,7 +432,7 @@
       animation-delay: 0.28s;
     }
 
-    /* Composer pinned securely at bottom */
+    /* Composer */
     .composer {
       flex: 0 0 auto;
       padding-top: 8px;
@@ -576,12 +577,15 @@
       <button class="clear" type="button" onclick="clearChat()">↺ &nbsp; Clear</button>
     </div>
 
-    <!-- Clean, empty starting state with just the welcome message -->
+    <!-- Messages Container with Centered Welcome Hero featuring the Icon Logo -->
     <div class="messages" id="messagesContainer" tabindex="0" aria-label="Message log">
-      <article class="message assistant welcome" aria-label="Fabulari">
-        <span class="spark" aria-hidden="true">✣</span>
-        <p>Type your message or custom instructions below to generate options.</p>
-      </article>
+      <div class="welcome-hero" id="welcomeHero">
+        <div class="hero-logo-large">
+          <img src="fabulari-icon.png" alt="Fabulari Logo" onerror="this.style.display='none'">
+        </div>
+        <h2>Where words find their voice.</h2>
+        <p>Type a message below to start crafting your response.</p>
+      </div>
     </div>
 
     <!-- Typing Indicator Element -->
@@ -591,7 +595,7 @@
         <span class="dot"></span>
         <span class="dot"></span>
       </div>
-      <span id="typingText">Refining your reply</span>
+      <span>Fabulari is thinking</span>
     </div>
 
     <footer class="composer">
@@ -649,20 +653,14 @@
 
     function clearChat() {
       messagesContainer.innerHTML = `
-        <article class="message assistant welcome" aria-label="Fabulari">
-          <span class="spark" aria-hidden="true">✣</span>
-          <p>Chat cleared. Type your message or custom instructions below.</p>
-        </article>
+        <div class="welcome-hero" id="welcomeHero">
+          <div class="hero-logo-large">
+            <img src="fabulari-icon.png" alt="Fabulari Logo" onerror="this.style.display='none'">
+          </div>
+          <h2>Where words find their voice.</h2>
+          <p>Type a message below to start crafting your response.</p>
+        </div>
       `;
-    }
-
-    function copyText(btn) {
-      const text = btn.previousElementSibling.textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        const original = btn.textContent;
-        btn.textContent = '✓';
-        setTimeout(() => { btn.textContent = original; }, 1200);
-      });
     }
 
     function scrollToBottom() {
@@ -670,6 +668,9 @@
     }
 
     function appendMessage(htmlContent, senderClass) {
+      const hero = document.getElementById('welcomeHero');
+      if (hero) hero.remove();
+
       const article = document.createElement('article');
       article.className = `message ${senderClass}`;
       article.innerHTML = htmlContent;
@@ -677,45 +678,25 @@
       scrollToBottom();
     }
 
-    // Dynamic response generator responding contextually to user input
     function handleSend() {
       const text = userInput.value.trim();
       if (!text) return;
 
-      // Add user message
+      const hero = document.getElementById('welcomeHero');
+      if (hero) hero.remove();
+
       appendMessage(`<p>${escapeHtml(text)}</p>`, 'user');
       userInput.value = '';
       userInput.style.height = '28px';
 
-      // Show typing indicator
       messagesContainer.appendChild(typingIndicator);
       typingIndicator.classList.add('active');
       scrollToBottom();
 
-      // Generate context-aware assistant options based on what the user typed
       setTimeout(() => {
         typingIndicator.classList.remove('active');
         
-        let responseText = `Here is a polished option for "${escapeHtml(text.length > 30 ? text.substring(0, 30) + '...' : text)}":`;
-        
-        const botReply = `
-          <div class="assistant-intro">
-            <span class="spark" aria-hidden="true">✣</span>
-            <p>${responseText}</p>
-          </div>
-          <div class="options">
-            <div class="option">
-              <span class="option-label">(1)</span>
-              <p>That's a wonderful perspective! I love how you approached this.</p>
-              <button class="copy" type="button" onclick="copyText(this)">⧉</button>
-            </div>
-            <div class="option">
-              <span class="option-label">(2)</span>
-              <p>Totally agree with you here. Let's build on this idea further!</p>
-              <button class="copy" type="button" onclick="copyText(this)">⧉</button>
-            </div>
-          </div>
-        `;
+        const botReply = `<p>That sounds wonderful! Here is a great way to phrase that: "${escapeHtml(text)}" ✨</p>`;
         appendMessage(botReply, 'assistant');
       }, 1200);
     }
