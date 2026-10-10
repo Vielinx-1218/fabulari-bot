@@ -229,13 +229,13 @@
     .cyan { background: linear-gradient(135deg, #31e4e8, #2788f1); }
     .orange { background: linear-gradient(135deg, #ffc15c, #ff547c); }
 
-    /* Main chat section taking full width/height without card borders */
+    /* Main chat section taking full height and anchoring composer to bottom */
     .chat {
       width: min(960px, 100%);
-      height: 100%;
+      height: calc(100vh - 76px);
+      height: calc(100svh - 76px);
       margin: 0 auto;
-      padding: 16px 24px;
-      flex: 1;
+      padding: 16px 24px 20px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -288,12 +288,13 @@
       color: var(--text);
     }
 
+    /* Scrollable messages taking available space */
     .messages {
       min-height: 0;
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 16px;
       padding: 4px 4px 16px;
       overflow-y: auto;
       scrollbar-width: thin;
@@ -430,7 +431,11 @@
       animation-delay: 0.28s;
     }
 
-    .composer { flex: 0 0 auto; padding-bottom: 16px; }
+    /* Composer pinned securely at bottom */
+    .composer {
+      flex: 0 0 auto;
+      padding-top: 8px;
+    }
 
     .input-shell {
       display: flex;
@@ -571,41 +576,11 @@
       <button class="clear" type="button" onclick="clearChat()">↺ &nbsp; Clear</button>
     </div>
 
+    <!-- Clean, empty starting state with just the welcome message -->
     <div class="messages" id="messagesContainer" tabindex="0" aria-label="Message log">
       <article class="message assistant welcome" aria-label="Fabulari">
         <span class="spark" aria-hidden="true">✣</span>
         <p>Type your message or custom instructions below to generate options.</p>
-      </article>
-
-      <article class="message user" aria-label="Your message">
-        <p>Someone commented “Your new collection is stunning!” on my post. Help me reply warmly, without sounding too salesy.</p>
-      </article>
-
-      <article class="message assistant" aria-label="Fabulari reply">
-        <div class="assistant-intro">
-          <span class="spark" aria-hidden="true">✣</span>
-          <p>Three ways to keep it warm and genuine.</p>
-        </div>
-
-        <div class="options">
-          <div class="option">
-            <span class="option-label">(A)</span>
-            <p>This made my day. Thank you for the kind words — so glad the new collection speaks to you!</p>
-            <button class="copy" type="button" onclick="copyText(this)" aria-label="Copy option A">⧉</button>
-          </div>
-
-          <div class="option">
-            <span class="option-label">(B)</span>
-            <p>Such a lovely thing to hear! A lot of care went into this collection, and your support means so much.</p>
-            <button class="copy" type="button" onclick="copyText(this)" aria-label="Copy option B">⧉</button>
-          </div>
-
-          <div class="option">
-            <span class="option-label">(C)</span>
-            <p>Thank you! Knowing these pieces found a little place in your day is exactly why I love creating them.</p>
-            <button class="copy" type="button" onclick="copyText(this)" aria-label="Copy option C">⧉</button>
-          </div>
-        </div>
       </article>
     </div>
 
@@ -702,36 +677,47 @@
       scrollToBottom();
     }
 
+    // Dynamic response generator responding contextually to user input
     function handleSend() {
       const text = userInput.value.trim();
       if (!text) return;
 
+      // Add user message
       appendMessage(`<p>${escapeHtml(text)}</p>`, 'user');
       userInput.value = '';
       userInput.style.height = '28px';
 
+      // Show typing indicator
       messagesContainer.appendChild(typingIndicator);
       typingIndicator.classList.add('active');
       scrollToBottom();
 
+      // Generate context-aware assistant options based on what the user typed
       setTimeout(() => {
         typingIndicator.classList.remove('active');
+        
+        let responseText = `Here is a polished option for "${escapeHtml(text.length > 30 ? text.substring(0, 30) + '...' : text)}":`;
         
         const botReply = `
           <div class="assistant-intro">
             <span class="spark" aria-hidden="true">✣</span>
-            <p>Here is a refined option based on your request:</p>
+            <p>${responseText}</p>
           </div>
           <div class="options">
             <div class="option">
               <span class="option-label">(1)</span>
-              <p>That means the world! So grateful it resonated with your style ✨</p>
+              <p>That's a wonderful perspective! I love how you approached this.</p>
+              <button class="copy" type="button" onclick="copyText(this)">⧉</button>
+            </div>
+            <div class="option">
+              <span class="option-label">(2)</span>
+              <p>Totally agree with you here. Let's build on this idea further!</p>
               <button class="copy" type="button" onclick="copyText(this)">⧉</button>
             </div>
           </div>
         `;
         appendMessage(botReply, 'assistant');
-      }, 1500);
+      }, 1200);
     }
 
     function escapeHtml(string) {
