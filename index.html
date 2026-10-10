@@ -487,6 +487,82 @@
         scroll-behavior: auto !important;
       }
     }
+
+
+/* ===================================
+   FABULARI LOGO HOVER ANIMATIONS
+   =================================== */
+
+/* Upper-left header logo */
+.brand-icon {
+    transition: transform 0.35s ease;
+    cursor: pointer;
+}
+
+.brand-icon img {
+    transform-origin: center;
+    transition:
+        transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+        filter 0.4s ease;
+}
+
+.brand-icon:hover {
+    transform: translateY(-2px);
+}
+
+.brand-icon:hover img {
+    transform: scale(1.15) rotate(-8deg);
+    filter:
+        drop-shadow(0 0 7px rgba(207, 106, 255, 0.9))
+        drop-shadow(0 0 16px rgba(58, 220, 255, 0.55));
+}
+
+/* Big logo above the tagline */
+.hero-logo-large {
+    cursor: pointer;
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.hero-logo-large img {
+    transform-origin: center;
+    transition:
+        transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+        filter 0.5s ease;
+}
+
+.hero-logo-large:hover {
+    transform: translateY(-6px) scale(1.035);
+}
+
+.hero-logo-large:hover img {
+    transform: rotate(-6deg) scale(1.06);
+    filter:
+        drop-shadow(0 0 12px rgba(207, 106, 255, 0.85))
+        drop-shadow(0 0 28px rgba(58, 220, 255, 0.65));
+}
+
+/* Make the big logo's glow brighter on hover */
+.hero-logo-large::before {
+    transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+.hero-logo-large:hover::before {
+    opacity: 1;
+    filter: blur(38px);
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .brand-icon,
+    .brand-icon img,
+    .hero-logo-large,
+    .hero-logo-large img,
+    .hero-logo-large::before {
+        transition: none !important;
+    }
+}
+
+    
   </style>
 </head>
 
