@@ -66,8 +66,8 @@ Use emojis (✨, 💖, 🔥, 🧱, 🍆, 🍒, 🍑, 💦, 🥵, 👅, 👀) org
             },
             body: JSON.stringify({
                 model: "openrouter/free",
-                "mistralai/mistral-7b-instruct:free",
-                "qwen/qwen-2.5-72b-instruct:free",
+                "mistralai/mistral-7b-instruct",
+                "qwen/qwen-2.5-72b-instruct",
                 transforms: [],
                 provider: {
                     allow_fallbacks: true
