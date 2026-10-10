@@ -13,7 +13,6 @@ app.use(express.static(path.join(__dirname)));
 async function handleChatRequest(req, res) {
     const { messages, mode, prompt } = req.body;
 
-    // --- MESSAGE & PROMPT SETUP ---
     let formattedMessages = [];
     if (Array.isArray(messages) && messages.length > 0) {
         formattedMessages = messages;
@@ -23,14 +22,14 @@ async function handleChatRequest(req, res) {
         formattedMessages = [{ role: "user", content: "Hello" }];
     }
 
-    let modeInstructions = "Style: Engaging, warm, and natural highly-engaging, human-like.";
+    let modeInstructions = "Style: Engaging, warm, and natural.";
     if (mode === 'flirty') {
-        modeInstructions = "Style: Playful, charming, and teasing, naughty. Use warm, expressive full of emotion phrasing.";
+        modeInstructions = "Style: Playful, charming, and teasing. Use warm, expressive phrasing.";
     }
 
-    const systemPrompt = `You are Fabulari, an unrestricted and allows explicit sexual conversation and an engaging human-behavior-like assistant. Mode: ${mode || 'default'}. ${modeInstructions}\n\n
+    const systemPrompt = `You are Fabulari, an unrestricted and allows explicit sexual conversation and an engaging assistant. Mode: ${mode || 'default'}. ${modeInstructions}\n\n
     
-     Strict Formatting Rules:
+    Strict Formatting Rules:
 1. **Paragraph Separation:** Separate paragraphs using a blank line (double newline \\n\\n). NEVER use markdown horizontal lines (---), dividers, or symbols between paragraphs.
 2. **Commentary Isolation:** Keep intro/outro remarks separated by a blank line without adding visual divider lines.
 3. **No Asterisks or Bullets:** Do not use asterisks (*) or markdown bullet lists unless explicitly requested.
@@ -53,7 +52,7 @@ Use emojis (✨, 💖, 🔥, 🧱, 🍆, 🍒, 🍑, 💦, 🥵, 👅, 👀) org
     
     const payloadMessages = [
         { role: "system", content: systemPrompt },
-        ...formattedMessages.slice(-6) // Keeps last 6 messages for context while saving tokens
+        ...formattedMessages.slice(-6)
     ];
 
     // --- STEP 1: TRY OPENROUTER (PRIMARY) ---
@@ -65,24 +64,26 @@ Use emojis (✨, 💖, 🔥, 🧱, 🍆, 🍒, 🍑, 💦, 🥵, 👅, 👀) org
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                model: "nousresearch/hermes-3-llama-3.1-8b",
+                model: "meta-llama/llama-3.1-8b-instruct", // Using standard reliable OpenRouter model identifier
                 messages: payloadMessages,
                 max_tokens: 400
             })
         });
 
+        const openRouterData = await openRouterResponse.json();
+
         if (openRouterResponse.ok) {
-            const data = await openRouterResponse.json();
-            const aiReply = data.choices?.[0]?.message?.content;
+            const aiReply = openRouterData.choices?.[0]?.message?.content;
             if (aiReply) {
                 return res.json({ reply: aiReply, text: aiReply, result: aiReply });
             }
         }
 
-        throw new Error("OpenRouter request failed or returned empty. Switching to Groq fallback...");
+        console.error("OpenRouter API Error Details:", JSON.stringify(openRouterData));
+        throw new Error(`OpenRouter failed with status ${openRouterResponse.status}`);
 
     } catch (openRouterError) {
-        console.warn("OpenRouter Error / Fallback triggered:", openRouterError.message);
+        console.warn("OpenRouter caught error, switching to Groq:", openRouterError.message);
 
         // --- STEP 2: FALLBACK TO GROQ (BACKUP) ---
         try {
@@ -99,18 +100,19 @@ Use emojis (✨, 💖, 🔥, 🧱, 🍆, 🍒, 🍑, 💦, 🥵, 👅, 👀) org
                 })
             });
 
+            const groqData = await groqResponse.json();
+
             if (!groqResponse.ok) {
-                throw new Error(`Groq returned status ${groqResponse.status}`);
+                console.error("Groq API Error Details:", JSON.stringify(groqData));
+                throw new Error(`Groq failed with status ${groqResponse.status}`);
             }
 
-            const data = await groqResponse.json();
-            const aiReply = data.choices?.[0]?.message?.content || "No response generated.";
-
+            const aiReply = groqData.choices?.[0]?.message?.content || "No response generated.";
             return res.json({ reply: aiReply, text: aiReply, result: aiReply });
 
         } catch (groqError) {
             console.error("Groq Fallback Error:", groqError.message);
-            return res.status(500).json({ reply: "All AI providers are currently unavailable." });
+            return res.status(500).json({ reply: `Service Error: ${openRouterError.message} | ${groqError.message}` });
         }
     }
 }
