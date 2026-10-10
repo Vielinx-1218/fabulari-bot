@@ -6,6 +6,9 @@
   <meta name="color-scheme" content="dark">
   <title>Fabulari</title>
 
+  <!-- Global Browser Tab Favicon -->
+  <link rel="icon" type="image/png" href="fabulari-icon.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -44,7 +47,8 @@
     body {
       margin: 0;
       height: 100svh;
-      padding: 40px;
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
       background: var(--bg);
       color: var(--text);
@@ -92,29 +96,19 @@
       animation: drift-rose 20s ease-in-out infinite alternate;
     }
 
-    .app {
-      width: min(100%, 1360px);
-      height: 100%;
-      margin: auto;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      background: var(--surface);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow: 0 24px 90px #0003;
-    }
-
+    /* Edge-to-edge header */
     .header {
-      min-height: 84px;
-      padding: 16px 30px;
+      height: 76px;
+      padding: 0 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 24px;
       border-bottom: 1px solid var(--border);
+      background: rgba(18, 18, 30, 0.4);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      flex: 0 0 auto;
     }
 
     .brand {
@@ -141,13 +135,13 @@
     }
 
     .brand-icon {
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       flex: 0 0 auto;
       position: relative;
       overflow: hidden;
       border: 1px solid #b58aff66;
-      border-radius: 14px;
+      border-radius: 12px;
       background: #0b0a19;
       box-shadow:
         0 0 16px #a78bfa55,
@@ -168,7 +162,7 @@
       margin: 0;
       padding: 0 5px;
       font-family: "Great Vibes", cursive;
-      font-size: 40px;
+      font-size: 38px;
       font-weight: 400;
       line-height: 1.2;
       white-space: nowrap;
@@ -199,7 +193,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 7px 10px;
+      padding: 6px 10px;
       border: 1px solid transparent;
       border-radius: 999px;
       background: transparent;
@@ -221,25 +215,26 @@
     }
 
     .swatch {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       display: grid;
       place-items: center;
       flex: 0 0 auto;
       border-radius: 50%;
       color: white;
-      font-size: 12px;
+      font-size: 11px;
     }
 
     .purple { background: linear-gradient(135deg, #7554f4, #c568df); }
     .cyan { background: linear-gradient(135deg, #31e4e8, #2788f1); }
     .orange { background: linear-gradient(135deg, #ffc15c, #ff547c); }
 
+    /* Main chat container */
     .chat {
-      width: min(920px, calc(100% - 64px));
+      width: min(960px, 100%);
       min-height: 0;
       margin: auto;
-      padding: 16px 0 22px;
+      padding: 20px 24px;
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -250,7 +245,8 @@
       justify-content: space-between;
       align-items: center;
       gap: 16px;
-      padding-bottom: 28px;
+      padding-bottom: 20px;
+      flex: 0 0 auto;
     }
 
     .modes {
@@ -297,7 +293,7 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-      padding: 2px 2px 30px;
+      padding: 4px 4px 20px;
       overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: #393448 transparent;
@@ -433,7 +429,7 @@
       animation-delay: 0.28s;
     }
 
-    .composer { flex: 0 0 auto; padding-top: 12px; }
+    .composer { flex: 0 0 auto; padding-top: 8px; }
 
     .input-shell {
       display: flex;
@@ -468,8 +464,8 @@
     textarea::placeholder { color: #8b859f; }
 
     .send {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       flex: 0 0 auto;
       display: grid;
       place-items: center;
@@ -487,13 +483,13 @@
 
     .send:active { transform: translateY(0); }
 
-    .send svg { width: 21px; height: 21px; }
+    .send svg { width: 20px; height: 20px; }
 
     .composer-footer {
       display: flex;
       justify-content: space-between;
       gap: 16px;
-      padding-top: 12px;
+      padding-top: 10px;
       color: #80798f;
       font-size: 11px;
     }
@@ -520,19 +516,12 @@
     }
 
     @media (max-width: 720px) {
-      body { padding: 12px; }
-      .app { border-radius: 18px; }
-      .header { padding: 14px 16px; gap: 12px; flex-wrap: wrap; }
-      .brand-name { font-size: 36px; }
+      .header { padding: 0 16px; gap: 12px; }
+      .brand-name { font-size: 34px; }
       .themes { gap: 3px; }
       .theme { padding: 5px; }
       .theme-name { display: none; }
-      .chat { width: calc(100% - 32px); padding-bottom: 16px; }
-      .toolbar { padding-bottom: 22px; }
-      .mode { padding: 7px 8px; font-size: 10px; }
-      .message, .welcome { max-width: 92%; }
-      .welcome { width: 92%; }
-      .user { max-width: 85%; }
+      .chat { width: 100%; padding: 16px; }
       .keyboard-hint { display: none; }
     }
   </style>
@@ -544,117 +533,117 @@
     <span></span><span></span><span></span>
   </div>
 
-  <main class="app" aria-label="Fabulari chat application">
-    <header class="header">
-      <div class="brand">
-        <div class="brand-icon">
-          <img src="fabulari-icon.png" alt="Fabulari Icon" onerror="this.style.display='none'">
-        </div>
-        <h1 class="brand-name">Fabulari</h1>
-        <span class="tagline">Your words, with possibility.</span>
+  <!-- Header -->
+  <header class="header">
+    <div class="brand">
+      <div class="brand-icon">
+        <img src="fabulari-icon.png" alt="Fabulari Icon" onerror="this.style.display='none'">
       </div>
+      <h1 class="brand-name">Fabulari</h1>
+      <span class="tagline">Your words, with possibility.</span>
+    </div>
 
-      <div class="themes" role="group" aria-label="Theme selectors">
-        <button class="theme selected" type="button" onclick="setTheme('purple', this)" aria-label="Cosmic Purple">
-          <span class="swatch purple" aria-hidden="true">✓</span>
-          <span class="theme-name">Cosmic Purple</span>
-        </button>
-        <button class="theme" type="button" onclick="setTheme('cyan', this)" aria-label="Cyberpunk Cyan">
-          <span class="swatch cyan" aria-hidden="true"></span>
-          <span class="theme-name">Cyberpunk Cyan</span>
-        </button>
-        <button class="theme" type="button" onclick="setTheme('orange', this)" aria-label="Sunset Orange">
-          <span class="swatch orange" aria-hidden="true"></span>
-          <span class="theme-name">Sunset Orange</span>
-        </button>
+    <div class="themes" role="group" aria-label="Theme selectors">
+      <button class="theme selected" type="button" onclick="setTheme('purple', this)" aria-label="Cosmic Purple">
+        <span class="swatch purple" aria-hidden="true">✓</span>
+        <span class="theme-name">Cosmic Purple</span>
+      </button>
+      <button class="theme" type="button" onclick="setTheme('cyan', this)" aria-label="Cyberpunk Cyan">
+        <span class="swatch cyan" aria-hidden="true"></span>
+        <span class="theme-name">Cyberpunk Cyan</span>
+      </button>
+      <button class="theme" type="button" onclick="setTheme('orange', this)" aria-label="Sunset Orange">
+        <span class="swatch orange" aria-hidden="true"></span>
+        <span class="theme-name">Sunset Orange</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Chat Section -->
+  <section class="chat" aria-label="Conversation">
+    <div class="toolbar">
+      <div class="modes" role="group" aria-label="Reply mode selectors">
+        <button class="mode active" type="button" onclick="setMode(this)">Public Comments</button>
+        <button class="mode" type="button" onclick="setMode(this)">Private DM</button>
+        <button class="mode" type="button" onclick="setMode(this)">Business / Collab</button>
       </div>
-    </header>
+      <button class="clear" type="button" onclick="clearChat()">↺ &nbsp; Clear</button>
+    </div>
 
-    <section class="chat" aria-label="Conversation">
-      <div class="toolbar">
-        <div class="modes" role="group" aria-label="Reply mode selectors">
-          <button class="mode active" type="button" onclick="setMode(this)">Public Comments</button>
-          <button class="mode" type="button" onclick="setMode(this)">Private DM</button>
-          <button class="mode" type="button" onclick="setMode(this)">Business / Collab</button>
-        </div>
-        <button class="clear" type="button" onclick="clearChat()">↺ &nbsp; Clear</button>
-      </div>
+    <div class="messages" id="messagesContainer" tabindex="0" aria-label="Message log">
+      <article class="message assistant welcome" aria-label="Fabulari">
+        <span class="spark" aria-hidden="true">✣</span>
+        <p>Type your message or custom instructions below to generate options.</p>
+      </article>
 
-      <div class="messages" id="messagesContainer" tabindex="0" aria-label="Message log">
-        <article class="message assistant welcome" aria-label="Fabulari">
+      <article class="message user" aria-label="Your message">
+        <p>Someone commented “Your new collection is stunning!” on my post. Help me reply warmly, without sounding too salesy.</p>
+      </article>
+
+      <article class="message assistant" aria-label="Fabulari reply">
+        <div class="assistant-intro">
           <span class="spark" aria-hidden="true">✣</span>
-          <p>Type your message or custom instructions below to generate options.</p>
-        </article>
+          <p>Three ways to keep it warm and genuine.</p>
+        </div>
 
-        <article class="message user" aria-label="Your message">
-          <p>Someone commented “Your new collection is stunning!” on my post. Help me reply warmly, without sounding too salesy.</p>
-        </article>
-
-        <article class="message assistant" aria-label="Fabulari reply">
-          <div class="assistant-intro">
-            <span class="spark" aria-hidden="true">✣</span>
-            <p>Three ways to keep it warm and genuine.</p>
+        <div class="options">
+          <div class="option">
+            <span class="option-label">(A)</span>
+            <p>This made my day. Thank you for the kind words — so glad the new collection speaks to you!</p>
+            <button class="copy" type="button" onclick="copyText(this)" aria-label="Copy option A">⧉</button>
           </div>
 
-          <div class="options">
-            <div class="option">
-              <span class="option-label">(A)</span>
-              <p>This made my day. Thank you for the kind words — so glad the new collection speaks to you!</p>
-              <button class="copy" type="button" onclick="copyText(this)" aria-label="Copy option A">⧉</button>
-            </div>
-
-            <div class="option">
-              <span class="option-label">(B)</span>
-              <p>Such a lovely thing to hear! A lot of care went into this collection, and your support means so much.</p>
-              <button class="copy" type="button" onclick="copyText(this)" aria-label="Copy option B">⧉</button>
-            </div>
-
-            <div class="option">
-              <span class="option-label">(C)</span>
-              <p>Thank you! Knowing these pieces found a little place in your day is exactly why I love creating them.</p>
-              <button class="copy" type="button" onclick="copyText(this)" aria-label="Copy option C">⧉</button>
-            </div>
+          <div class="option">
+            <span class="option-label">(B)</span>
+            <p>Such a lovely thing to hear! A lot of care went into this collection, and your support means so much.</p>
+            <button class="copy" type="button" onclick="copyText(this)" aria-label="Copy option B">⧉</button>
           </div>
-        </article>
+
+          <div class="option">
+            <span class="option-label">(C)</span>
+            <p>Thank you! Knowing these pieces found a little place in your day is exactly why I love creating them.</p>
+            <button class="copy" type="button" onclick="copyText(this)" aria-label="Copy option C">⧉</button>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Typing Indicator Element -->
+    <div class="message assistant typing" id="typingIndicator" role="status">
+      <div class="dots" aria-hidden="true">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+      <span id="typingText">Refining your reply</span>
+    </div>
+
+    <footer class="composer">
+      <div class="input-shell">
+        <textarea
+          id="userInput"
+          rows="1"
+          aria-label="Message input"
+          placeholder="Send a message or type instructions..."
+        ></textarea>
+
+        <button class="send" id="sendBtn" type="button" onclick="handleSend()" aria-label="Send message">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 19V5M5 12l7-7 7 7"></path>
+          </svg>
+        </button>
       </div>
 
-      <!-- Typing Indicator Element -->
-      <div class="message assistant typing" id="typingIndicator" role="status">
-        <div class="dots" aria-hidden="true">
-          <span class="dot"></span>
-          <span class="dot"></span>
-          <span class="dot"></span>
-        </div>
-        <span id="typingText">Refining your reply</span>
+      <div class="composer-footer">
+        <span>A little inspiration. Always your voice.</span>
+        <span class="keyboard-hint">
+          Enter to send · Shift + Enter for a new line
+        </span>
       </div>
-
-      <footer class="composer">
-        <div class="input-shell">
-          <textarea
-            id="userInput"
-            rows="1"
-            aria-label="Message input"
-            placeholder="Send a message or type instructions..."
-          ></textarea>
-
-          <button class="send" id="sendBtn" type="button" onclick="handleSend()" aria-label="Send message">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="1.8" stroke-linecap="round"
-              stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 19V5M5 12l7-7 7 7"></path>
-            </svg>
-          </button>
-        </div>
-
-        <div class="composer-footer">
-          <span>A little inspiration. Always your voice.</span>
-          <span class="keyboard-hint">
-            Enter to send · Shift + Enter for a new line
-          </span>
-        </div>
-      </footer>
-    </section>
-  </main>
+    </footer>
+  </section>
 
   <script>
     const messagesContainer = document.getElementById('messagesContainer');
@@ -723,17 +712,14 @@
       const text = userInput.value.trim();
       if (!text) return;
 
-      // Add user message
       appendMessage(`<p>${escapeHtml(text)}</p>`, 'user');
       userInput.value = '';
       userInput.style.height = '28px';
 
-      // Show typing indicator
       messagesContainer.appendChild(typingIndicator);
       typingIndicator.classList.add('active');
       scrollToBottom();
 
-      // Simulate AI response stream
       setTimeout(() => {
         typingIndicator.classList.remove('active');
         
@@ -754,12 +740,10 @@
       }, 1500);
     }
 
-    // Simple HTML escape for safety
     function escapeHtml(string) {
       return string.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    // Input auto-resize & keyboard listeners
     userInput.addEventListener('input', function() {
       this.style.height = '28px';
       this.style.height = (this.scrollHeight - 6) + 'px';
