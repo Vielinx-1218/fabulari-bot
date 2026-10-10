@@ -682,9 +682,14 @@
     </footer>
   </section>
 
+
 <script>
   const messagesContainer = document.getElementById('messagesContainer');
   const userInput = document.getElementById('userInput');
+
+  let conversationHistory = [];
+  let currentMode = 'default';
+  let isSending = false;
 
   function setTheme(themeName, btn) {
     document.body.className = '';
@@ -695,8 +700,7 @@
 
     document.querySelectorAll('.theme').forEach(t => {
       t.classList.remove('selected');
-      const swatch = t.querySelector('.swatch');
-      swatch.textContent = '';
+      t.querySelector('.swatch').textContent = '';
     });
 
     btn.classList.add('selected');
@@ -709,9 +713,21 @@
     );
 
     btn.classList.add('active');
+
+    const label = btn.textContent.trim().toLowerCase();
+
+    if (label.includes('private')) {
+      currentMode = 'private_dm';
+    } else if (label.includes('business')) {
+      currentMode = 'business_collab';
+    } else {
+      currentMode = 'default';
+    }
   }
 
   function clearChat() {
+    conversationHistory = [];
+
     messagesContainer.innerHTML = `
       <div class="welcome-hero" id="welcomeHero">
         <div class="hero-logo-large">
@@ -728,42 +744,119 @@
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
   }
 
-  function appendMessage(htmlContent, senderClass) {
+  function escapeHtml(string) {
+    return String(string)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function appendMessage(content, senderClass) {
     const hero = document.getElementById('welcomeHero');
     if (hero) hero.remove();
 
     const row = document.createElement('div');
     row.className = `message-row ${senderClass}`;
 
+    if (senderClass === 'assistant') {
+      const avatar = document.createElement('div');
+      avatar.className = 'chat-avatar';
+
+      const img = document.createElement('img');
+      img.src = 'fabulari-icon.png';
+      img.alt = 'Fabulari';
+
+      avatar.appendChild(img);
+      row.appendChild(avatar);
+    }
+
     const article = document.createElement('article');
     article.className = 'message';
-    article.innerHTML = htmlContent;
 
+    const paragraph = document.createElement('p');
+    paragraph.textContent = content;
+
+    article.appendChild(paragraph);
     row.appendChild(article);
     messagesContainer.appendChild(row);
 
     scrollToBottom();
   }
 
-  function handleSend() {
+  async function handleSend() {
     const text = userInput.value.trim();
-    if (!text) return;
 
-    appendMessage(`<p>${escapeHtml(text)}</p>`, 'user');
+    if (!text || isSending) return;
+
+    isSending = true;
+
+    appendMessage(text, 'user');
+
+    conversationHistory.push({
+      role: 'user',
+      content: text
+    });
 
     userInput.value = '';
     userInput.style.height = '28px';
 
-    scrollToBottom();
+    const sendBtn = document.getElementById('sendBtn');
+    if (sendBtn) sendBtn.disabled = true;
 
-    // Bot replies are handled by your separate JavaScript file.
-  }
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          messages: conversationHistory,
+          mode: currentMode
+        })
+      });
 
-  function escapeHtml(string) {
-    return string
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.reply || `Request failed (${response.status})`
+        );
+      }
+
+      const reply = data.reply || data.text || data.result;
+
+      if (typeof reply !== 'string' || !reply.trim()) {
+        throw new Error('The server returned an empty response.');
+      }
+
+      conversationHistory.push({
+        role: 'assistant',
+        content: reply
+      });
+
+      appendMessage(reply, 'assistant');
+
+    } catch (error) {
+      console.error('Chat request failed:', error);
+
+      appendMessage(
+        `Unable to get a response: ${error.message}. Please try again.`,
+        'assistant'
+      );
+
+      // Remove the failed user turn from history so it
+      // can be submitted again without duplicating it.
+      conversationHistory.pop();
+
+    } finally {
+      isSending = false;
+
+      if (sendBtn) sendBtn.disabled = false;
+
+      userInput.focus();
+    }
   }
 
   userInput.addEventListener('input', function() {
@@ -771,9 +864,9 @@
     this.style.height = (this.scrollHeight - 6) + 'px';
   });
 
-  userInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
+  userInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
       handleSend();
     }
   });
