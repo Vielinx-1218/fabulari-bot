@@ -6,8 +6,9 @@
   <meta name="color-scheme" content="dark">
   <title>Fabulari</title>
 
-  <!-- Global Browser Tab Favicon -->
-  <link rel="icon" type="image/png" href="fabulari-icon.png">
+  <!-- Fixed Browser Tab Favicon links with explicit sizing -->
+  <link rel="icon" type="image/png" sizes="32x32" href="fabulari-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="fabulari-icon.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,9 +97,9 @@
       animation: drift-rose 20s ease-in-out infinite alternate;
     }
 
-    /* Edge-to-edge header */
+    /* Edge-to-edge header adjusted for 3-4x larger top-left logo */
     .header {
-      height: 76px;
+      height: 90px;
       padding: 0 32px;
       display: flex;
       align-items: center;
@@ -115,20 +116,19 @@
       position: relative;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
       isolation: isolate;
     }
 
-    /* Standalone logo with interactive rotating background shadow on hover */
+    /* Top-Left Header Logo scaled 3-4x bigger (120px) */
     .brand-icon {
-      width: 42px;
-      height: 42px;
+      width: 120px;
+      height: 120px;
       flex: 0 0 auto;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 50%;
       cursor: pointer;
       transition: transform 0.3s ease;
     }
@@ -136,17 +136,17 @@
     .brand-icon::before {
       content: "";
       position: absolute;
-      inset: -4px;
+      inset: -10px;
       border-radius: 50%;
       background: conic-gradient(from 0deg, #7955ef, #c465df, #31e4e8, #7955ef);
-      filter: blur(10px);
+      filter: blur(18px);
       opacity: 0;
       z-index: -1;
       transition: opacity 0.3s ease;
     }
 
     .brand-icon:hover {
-      transform: scale(1.08);
+      transform: scale(1.06);
     }
 
     .brand-icon:hover::before {
@@ -158,7 +158,7 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      filter: drop-shadow(0 4px 10px rgba(121, 85, 239, 0.35));
+      filter: drop-shadow(0 6px 14px rgba(121, 85, 239, 0.4));
     }
 
     @keyframes rotateGlow {
@@ -170,7 +170,7 @@
       margin: 0;
       padding: 0 5px;
       font-family: "Great Vibes", cursive;
-      font-size: 38px;
+      font-size: 42px;
       font-weight: 400;
       line-height: 1.2;
       white-space: nowrap;
@@ -187,7 +187,7 @@
 
     .tagline {
       color: var(--muted);
-      font-size: 12px;
+      font-size: 13px;
       white-space: nowrap;
     }
 
@@ -240,8 +240,8 @@
     /* Main chat section */
     .chat {
       width: min(960px, 100%);
-      height: calc(100vh - 76px);
-      height: calc(100svh - 76px);
+      height: calc(100vh - 90px);
+      height: calc(100svh - 90px);
       margin: 0 auto;
       padding: 16px 24px 20px;
       display: flex;
@@ -310,21 +310,22 @@
       scroll-behavior: smooth;
     }
 
-    /* Centered Welcome Hero Screen with larger logo & catchphrase */
+    /* Centered Welcome Hero Screen */
     .welcome-hero {
       margin: auto;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 20px;
       padding: 20px;
       animation: fadeIn 0.4s ease forwards;
     }
 
+    /* Center Hero Logo scaled 6-7x bigger (220px) */
     .hero-logo-large {
-      width: 80px;
-      height: 80px;
+      width: 220px;
+      height: 220px;
       position: relative;
       display: flex;
       align-items: center;
@@ -336,18 +337,18 @@
     .hero-logo-large::before {
       content: "";
       position: absolute;
-      inset: -6px;
+      inset: -16px;
       border-radius: 50%;
       background: conic-gradient(from 0deg, #7955ef, #c465df, #31e4e8, #7955ef);
-      filter: blur(16px);
-      opacity: 0.6;
+      filter: blur(32px);
+      opacity: 0.7;
       z-index: -1;
       transition: opacity 0.3s ease;
       animation: rotateGlow 6s linear infinite;
     }
 
     .hero-logo-large:hover {
-      transform: scale(1.06);
+      transform: scale(1.05);
     }
 
     .hero-logo-large:hover::before {
@@ -358,24 +359,18 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      filter: drop-shadow(0 6px 16px rgba(121, 85, 239, 0.4));
+      filter: drop-shadow(0 10px 24px rgba(121, 85, 239, 0.5));
     }
 
     .welcome-hero h2 {
       margin: 0;
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 500;
       letter-spacing: -0.01em;
       background: linear-gradient(90deg, #eeedf7, #b47fff);
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
-    }
-
-    .welcome-hero p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.95rem;
     }
 
     /* Chat Bubbles (Messenger Style) */
@@ -548,6 +543,8 @@
 
     @media (max-width: 720px) {
       .header { padding: 0 16px; gap: 12px; }
+      .brand-icon { width: 70px; height: 70px; }
+      .hero-logo-large { width: 140px; height: 140px; }
       .brand-name { font-size: 34px; }
       .themes { gap: 3px; }
       .theme { padding: 5px; }
@@ -593,22 +590,17 @@
   <!-- Main Chat Section -->
   <section class="chat" aria-label="Conversation">
     <div class="toolbar">
-      <div class="modes" role="group" aria-label="Reply mode selectors">
-        <button class="mode active" type="button" onclick="setMode(this)">Public Comments</button>
-        <button class="mode" type="button" onclick="setMode(this)">Private DM</button>
-        <button class="mode" type="button" onclick="setMode(this)">Business / Collab</button>
-      </div>
+     
       <button class="clear" type="button" onclick="clearChat()">↺ &nbsp; Clear</button>
     </div>
 
-    <!-- Messages Container with Centered Welcome Hero -->
+    <!-- Messages Container with Scaled Up Centered Welcome Hero -->
     <div class="messages" id="messagesContainer" tabindex="0" aria-label="Message log">
       <div class="welcome-hero" id="welcomeHero">
         <div class="hero-logo-large">
           <img src="fabulari-icon.png" alt="Fabulari Logo" onerror="this.style.display='none'">
         </div>
-        <h2><i></i>Where words find their voice.</i></h2>
-      
+        <h2>Where words find their voice.</h2>
       </div>
     </div>
 
@@ -628,7 +620,7 @@
           id="userInput"
           rows="1"
           aria-label="Message input"
-          placeholder="Say something..."
+          placeholder="Send a message or type instructions..."
         ></textarea>
 
         <button class="send" id="sendBtn" type="button" onclick="handleSend()" aria-label="Send message">
@@ -682,7 +674,6 @@
             <img src="fabulari-icon.png" alt="Fabulari Logo" onerror="this.style.display='none'">
           </div>
           <h2>Where words find their voice.</h2>
-          <p>Type a message below to start crafting your response.</p>
         </div>
       `;
     }
