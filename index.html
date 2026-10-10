@@ -6,9 +6,8 @@
   <meta name="color-scheme" content="dark">
   <title>Fabulari</title>
 
-  <!-- Browser Tab Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="fabulari-icon.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="fabulari-icon.png">
+  <!-- Fallback / Direct Data URI Favicon to guarantee browser tab icon loads -->
+  <link rel="icon" type="image/png" href="fabulari-icon.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,7 +98,7 @@
 
     /* Edge-to-edge header */
     .header {
-      height: 90px;
+      height: 76px;
       padding: 0 32px;
       display: flex;
       align-items: center;
@@ -116,13 +115,14 @@
       position: relative;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       isolation: isolate;
     }
 
+    /* Top-Left Header Logo */
     .brand-icon {
-      width: 120px;
-      height: 120px;
+      width: 46px;
+      height: 46px;
       flex: 0 0 auto;
       position: relative;
       display: flex;
@@ -135,17 +135,17 @@
     .brand-icon::before {
       content: "";
       position: absolute;
-      inset: -10px;
+      inset: -6px;
       border-radius: 50%;
       background: conic-gradient(from 0deg, #7955ef, #c465df, #31e4e8, #7955ef);
-      filter: blur(18px);
+      filter: blur(12px);
       opacity: 0;
       z-index: -1;
       transition: opacity 0.3s ease;
     }
 
     .brand-icon:hover {
-      transform: scale(1.06);
+      transform: scale(1.08);
     }
 
     .brand-icon:hover::before {
@@ -157,7 +157,7 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      filter: drop-shadow(0 6px 14px rgba(121, 85, 239, 0.4));
+      filter: drop-shadow(0 4px 10px rgba(121, 85, 239, 0.4));
     }
 
     @keyframes rotateGlow {
@@ -169,10 +169,11 @@
       margin: 0;
       padding: 0 5px;
       font-family: "Great Vibes", cursive;
-      font-size: 42px;
+      font-size: 38px;
       font-weight: 400;
       line-height: 1.2;
       white-space: nowrap;
+      cursor: pointer;
       background: linear-gradient(
         90deg, #e0c3ff, #b47fff 40%, #9b5fef 70%, #d4a0ff
       );
@@ -182,11 +183,19 @@
       filter:
         drop-shadow(0 4px 9px #9b5fef80)
         drop-shadow(0 0 16px #c084fc55);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
+    }
+
+    .brand-name:hover {
+      transform: translateY(-2px);
+      filter:
+        drop-shadow(0 6px 14px #b47fffb3)
+        drop-shadow(0 0 22px #c084fc88);
     }
 
     .tagline {
       color: var(--muted);
-      font-size: 13px;
+      font-size: 12px;
       white-space: nowrap;
     }
 
@@ -239,8 +248,8 @@
     /* Main chat section */
     .chat {
       width: min(960px, 100%);
-      height: calc(100vh - 90px);
-      height: calc(100svh - 90px);
+      height: calc(100vh - 76px);
+      height: calc(100svh - 76px);
       margin: 0 auto;
       padding: 16px 24px 20px;
       display: flex;
@@ -583,7 +592,7 @@
 
     @media (max-width: 720px) {
       .header { padding: 0 16px; gap: 12px; }
-      .brand-icon { width: 70px; height: 70px; }
+      .brand-icon { width: 38px; height: 38px; }
       .hero-logo-large { width: 140px; height: 140px; }
       .brand-name { font-size: 34px; }
       .themes { gap: 3px; }
@@ -611,30 +620,13 @@
       <span class="tagline">Your words, with possibility.</span>
     </div>
 
-    <div class="themes" role="group" aria-label="Theme selectors">
-      <button class="theme selected" type="button" onclick="setTheme('purple', this)" aria-label="Cosmic Purple">
-        <span class="swatch purple" aria-hidden="true">✓</span>
-        <span class="theme-name">Cosmic Purple</span>
-      </button>
-      <button class="theme" type="button" onclick="setTheme('cyan', this)" aria-label="Cyberpunk Cyan">
-        <span class="swatch cyan" aria-hidden="true"></span>
-        <span class="theme-name">Cyberpunk Cyan</span>
-      </button>
-      <button class="theme" type="button" onclick="setTheme('orange', this)" aria-label="Sunset Orange">
-        <span class="swatch orange" aria-hidden="true"></span>
-        <span class="theme-name">Sunset Orange</span>
-      </button>
-    </div>
+   
   </header>
 
   <!-- Main Chat Section -->
   <section class="chat" aria-label="Conversation">
     <div class="toolbar">
-      <div class="modes" role="group" aria-label="Reply mode selectors">
-        <button class="mode active" type="button" onclick="setMode(this)">Public Comments</button>
-        <button class="mode" type="button" onclick="setMode(this)">Private DM</button>
-        <button class="mode" type="button" onclick="setMode(this)">Business / Collab</button>
-      </div>
+     
       <button class="clear" type="button" onclick="clearChat()">↺ &nbsp; Clear</button>
     </div>
 
