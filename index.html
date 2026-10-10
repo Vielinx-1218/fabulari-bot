@@ -432,6 +432,25 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    @keyframes fabulariTyping {
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+    30% {
+        transform: translateY(-5px);
+        opacity: 1;
+    }
+}
+
+/* Dark theme support */
+body.dark .typing-indicator {
+    background: #333333;
+}
+
+body.dark .typing-indicator span {
+    background: #ffffff;
+
     .message p { margin: 0; word-break: break-word; }
 
     /* Assistant Bubble */
@@ -675,9 +694,7 @@
 
       <div class="composer-footer">
         <span>A little inspiration. Always your voice.</span>
-        <span class="keyboard-hint">
-          Enter to send · Shift + Enter for a new line
-        </span>
+       
       </div>
     </footer>
   </section>
@@ -739,6 +756,30 @@
       </div>
     `;
   }
+
+  
+function showTypingIndicator() {
+    removeTypingIndicator();
+
+    const indicator = document.createElement("div");
+    indicator.id = "fabulari-typing";
+    indicator.className = "typing-indicator";
+
+    for (let i = 0; i < 3; i++) {
+        indicator.appendChild(document.createElement("span"));
+    }
+
+    chatMessages.appendChild(indicator);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function removeTypingIndicator() {
+    const indicator = document.getElementById("fabulari-typing");
+    if (indicator) {
+        indicator.remove();
+    }
+}
+
 
   function scrollToBottom() {
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
