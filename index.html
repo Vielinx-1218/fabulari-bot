@@ -682,87 +682,102 @@
     </footer>
   </section>
 
-  <script>
-    const messagesContainer = document.getElementById('messagesContainer');
-    const userInput = document.getElementById('userInput');
-    const typingIndicator = document.getElementById('typingIndicator');
+<script>
+  const messagesContainer = document.getElementById('messagesContainer');
+  const userInput = document.getElementById('userInput');
 
-    function setTheme(themeName, btn) {
-      document.body.className = '';
-      if (themeName !== 'purple') {
-        document.body.classList.add(`theme-${themeName}`);
-      }
+  function setTheme(themeName, btn) {
+    document.body.className = '';
 
-      document.querySelectorAll('.theme').forEach(t => {
-        t.classList.remove('selected');
-        const swatch = t.querySelector('.swatch');
-        swatch.textContent = '';
-      });
-
-      btn.classList.add('selected');
-      btn.querySelector('.swatch').textContent = '✓';
+    if (themeName !== 'purple') {
+      document.body.classList.add(`theme-${themeName}`);
     }
 
-    function setMode(btn) {
-      document.querySelectorAll('.mode').forEach(m => m.classList.remove('active'));
-      btn.classList.add('active');
-    }
+    document.querySelectorAll('.theme').forEach(t => {
+      t.classList.remove('selected');
+      const swatch = t.querySelector('.swatch');
+      swatch.textContent = '';
+    });
 
-    function clearChat() {
-      messagesContainer.innerHTML = `
-        <div class="welcome-hero" id="welcomeHero">
-          <div class="hero-logo-large">
-            <img src="fabulari-icon.png" alt="Fabulari Logo" onerror="this.style.display='none'">
-          </div>
-          <h2>Where words find their voice.</h2>
+    btn.classList.add('selected');
+    btn.querySelector('.swatch').textContent = '✓';
+  }
+
+  function setMode(btn) {
+    document.querySelectorAll('.mode').forEach(m =>
+      m.classList.remove('active')
+    );
+
+    btn.classList.add('active');
+  }
+
+  function clearChat() {
+    messagesContainer.innerHTML = `
+      <div class="welcome-hero" id="welcomeHero">
+        <div class="hero-logo-large">
+          <img src="fabulari-icon.png"
+               alt="Fabulari Logo"
+               onerror="this.style.display='none'">
         </div>
-      `;
+        <h2>Where words find their voice.</h2>
+      </div>
+    `;
+  }
+
+  function scrollToBottom() {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  function appendMessage(htmlContent, senderClass) {
+    const hero = document.getElementById('welcomeHero');
+    if (hero) hero.remove();
+
+    const row = document.createElement('div');
+    row.className = `message-row ${senderClass}`;
+
+    const article = document.createElement('article');
+    article.className = 'message';
+    article.innerHTML = htmlContent;
+
+    row.appendChild(article);
+    messagesContainer.appendChild(row);
+
+    scrollToBottom();
+  }
+
+  function handleSend() {
+    const text = userInput.value.trim();
+    if (!text) return;
+
+    appendMessage(`<p>${escapeHtml(text)}</p>`, 'user');
+
+    userInput.value = '';
+    userInput.style.height = '28px';
+
+    scrollToBottom();
+
+    // Bot replies are handled by your separate JavaScript file.
+  }
+
+  function escapeHtml(string) {
+    return string
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  userInput.addEventListener('input', function() {
+    this.style.height = '28px';
+    this.style.height = (this.scrollHeight - 6) + 'px';
+  });
+
+  userInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
     }
+  });
+</script>
 
-    function scrollToBottom() {
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-
-    function appendMessage(htmlContent, senderClass) {
-      const hero = document.getElementById('welcomeHero');
-      if (hero) hero.remove();
-
-      const row = document.createElement('div');
-      row.className = `message-row ${senderClass}`;
-
-      if (senderClass === 'assistant') {
-        const avatar = document.createElement('div');
-        avatar.className = 'chat-avatar';
-        avatar.innerHTML = `<img src="fabulari-icon.png" alt="Bot" onerror="this.style.display='none'">`;
-        row.appendChild(avatar);
-      }
-
-      const article = document.createElement('article');
-      article.className = `message`;
-      article.innerHTML = htmlContent;
-      row.appendChild(article);
-
-      messagesContainer.appendChild(row);
-      scrollToBottom();
-    }
-
- 
-
-    function escapeHtml(string) {
-      return string.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
-
-    userInput.addEventListener('input', function() {
-      this.style.height = '28px';
-      this.style.height = (this.scrollHeight - 6) + 'px';
-    });
-
-    userInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSend();
-      }
-    });
-  </script>
 </body>
 </html>
