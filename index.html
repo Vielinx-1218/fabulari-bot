@@ -6,104 +6,95 @@
   <meta name="color-scheme" content="dark">
   <title>Fabulari</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap"
+    rel="stylesheet"
+  >
+
   <style>
     :root {
-      --background: #090910;
-      --surface: rgba(18, 18, 30, 0.66);
+      --bg: #090910;
+      --surface: rgba(18, 18, 30, 0.72);
       --card: rgba(21, 21, 34, 0.65);
-      --border: rgba(255, 255, 255, 0.11);
+      --border: rgba(255, 255, 255, 0.1);
       --text: #eeedf7;
       --muted: #9492aa;
-      --purple: #7955ef;
-      --pink: #c465df;
-      --cyan: #25d9ed;
-      --gradient: linear-gradient(115deg, var(--purple), var(--pink));
+      --gradient: linear-gradient(115deg, #7955ef, #c465df);
     }
 
-    * {
-      box-sizing: border-box;
+    /* Theme Variants */
+    body.theme-cyan {
+      --gradient: linear-gradient(115deg, #2788f1, #31e4e8);
+    }
+    body.theme-cyan .dot:nth-child(3) {
+      background: linear-gradient(135deg, #2788f1, #31e4e8);
     }
 
-    html,
+    body.theme-orange {
+      --gradient: linear-gradient(115deg, #ffc15c, #ff547c);
+    }
+    body.theme-orange .dot:nth-child(3) {
+      background: linear-gradient(135deg, #ffc15c, #ff547c);
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      min-height: 100%;
-    }
-
-    body {
-      min-height: 100svh;
+      height: 100svh;
       padding: 40px;
       overflow: hidden;
+      background: var(--bg);
       color: var(--text);
-      background: var(--background);
-      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
+      font: 14px/1.6 system-ui, -apple-system, BlinkMacSystemFont,
         "Segoe UI", sans-serif;
-      font-size: 14px;
       -webkit-font-smoothing: antialiased;
       isolation: isolate;
+      transition: background 0.3s ease;
     }
 
-    button,
-    textarea {
-      font: inherit;
-    }
+    button, textarea { font: inherit; }
+    button { color: inherit; cursor: pointer; }
 
-    button {
-      color: inherit;
-    }
-
-    button:disabled {
-      opacity: 1;
-      cursor: default;
-    }
-
-    /* Soft, independently drifting mesh-gradient layers. */
-    .ambient {
+    .mesh {
       position: fixed;
       inset: -15%;
-      pointer-events: none;
       z-index: -1;
+      pointer-events: none;
     }
 
-    .ambient::before,
-    .ambient::after,
-    .ambient .rose {
-      content: "";
+    .mesh span {
       position: absolute;
       inset: 0;
       will-change: transform;
     }
 
-    .ambient::before {
+    .mesh span:nth-child(1) {
       background: radial-gradient(
-        ellipse at 36% 32%,
-        rgba(106, 58, 200, 0.23),
-        transparent 48%
+        ellipse at 35% 30%, #7036c83b, transparent 48%
       );
-      animation: violet-drift 18s ease-in-out infinite alternate;
+      animation: drift-purple 18s ease-in-out infinite alternate;
     }
 
-    .ambient::after {
+    .mesh span:nth-child(2) {
       background: radial-gradient(
-        ellipse at 90% 67%,
-        rgba(26, 164, 189, 0.12),
-        transparent 42%
+        ellipse at 90% 70%, #1aa4bd20, transparent 42%
       );
-      animation: cyan-drift 22s ease-in-out infinite alternate;
+      animation: drift-cyan 22s ease-in-out infinite alternate;
     }
 
-    .ambient .rose {
+    .mesh span:nth-child(3) {
       background: radial-gradient(
-        ellipse at 39% 94%,
-        rgba(183, 55, 124, 0.13),
-        transparent 40%
+        ellipse at 40% 95%, #b7377c22, transparent 40%
       );
-      animation: rose-drift 20s ease-in-out infinite alternate;
+      animation: drift-rose 20s ease-in-out infinite alternate;
     }
 
     .app {
       width: min(100%, 1360px);
-      height: calc(100svh - 80px);
+      height: 100%;
       margin: auto;
       display: flex;
       flex-direction: column;
@@ -113,12 +104,12 @@
       background: var(--surface);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      box-shadow: 0 24px 90px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 24px 90px #0003;
     }
 
     .header {
-      min-height: 78px;
-      padding: 18px 30px;
+      min-height: 84px;
+      padding: 16px 30px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -127,35 +118,75 @@
     }
 
     .brand {
+      position: relative;
       display: flex;
       align-items: center;
       gap: 12px;
-      white-space: nowrap;
+      isolation: isolate;
     }
 
-    .brand-mark {
-      width: 30px;
-      height: 30px;
-      display: grid;
-      place-items: center;
-      color: #c5b3ff;
-      background: rgba(136, 108, 238, 0.1);
-      border: 1px solid rgba(171, 144, 255, 0.3);
-      border-radius: 8px;
-      font-size: 20px;
+    .brand::before {
+      content: "";
+      position: absolute;
+      left: 28px;
+      top: 50%;
+      width: 160px;
+      height: 48px;
+      transform: translateY(-50%);
+      border-radius: 50%;
+      background: linear-gradient(110deg, #8853ed4d, #d07dff33, #5b9bff1a);
+      filter: blur(22px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 auto;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #b58aff66;
+      border-radius: 14px;
+      background: #0b0a19;
+      box-shadow:
+        0 0 16px #a78bfa55,
+        0 4px 12px #0003;
+    }
+
+    .brand-icon img {
+      position: absolute;
+      width: 217.4%;
+      height: 217.4%;
+      max-width: none;
+      left: -58.7%;
+      top: -58.7%;
+      object-fit: contain;
     }
 
     .brand-name {
       margin: 0;
-      font-size: 22px;
-      font-weight: 500;
-      letter-spacing: -0.6px;
+      padding: 0 5px;
+      font-family: "Great Vibes", cursive;
+      font-size: 40px;
+      font-weight: 400;
+      line-height: 1.2;
+      white-space: nowrap;
+      background: linear-gradient(
+        90deg, #e0c3ff, #b47fff 40%, #9b5fef 70%, #d4a0ff
+      );
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      filter:
+        drop-shadow(0 4px 9px #9b5fef80)
+        drop-shadow(0 0 16px #c084fc55);
     }
 
     .tagline {
-      margin-left: 2px;
       color: var(--muted);
       font-size: 12px;
+      white-space: nowrap;
     }
 
     .themes {
@@ -168,48 +199,46 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 10px;
+      padding: 7px 10px;
       border: 1px solid transparent;
       border-radius: 999px;
       background: transparent;
       color: var(--muted);
       font-size: 12px;
       white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .theme:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
     }
 
     .theme.selected {
+      border-color: #bba6ff40;
+      background: #9076da14;
       color: var(--text);
-      background: rgba(144, 118, 218, 0.08);
-      border-color: rgba(187, 166, 255, 0.25);
     }
 
     .swatch {
       width: 22px;
       height: 22px;
-      flex: 0 0 auto;
       display: grid;
       place-items: center;
+      flex: 0 0 auto;
       border-radius: 50%;
       color: white;
       font-size: 12px;
     }
 
-    .swatch.purple {
-      background: linear-gradient(135deg, #7554f4, #c568df);
-    }
-
-    .swatch.cyan {
-      background: linear-gradient(135deg, #31e4e8, #2788f1);
-    }
-
-    .swatch.orange {
-      background: linear-gradient(135deg, #ffc15c, #ff547c);
-    }
+    .purple { background: linear-gradient(135deg, #7554f4, #c568df); }
+    .cyan { background: linear-gradient(135deg, #31e4e8, #2788f1); }
+    .orange { background: linear-gradient(135deg, #ffc15c, #ff547c); }
 
     .chat {
-      width: min(100%, 920px);
+      width: min(920px, calc(100% - 64px));
       min-height: 0;
-      margin: 0 auto;
+      margin: auto;
       padding: 16px 0 22px;
       flex: 1;
       display: flex;
@@ -217,21 +246,20 @@
     }
 
     .toolbar {
-      padding: 0 0 28px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: 16px;
+      padding-bottom: 28px;
     }
 
     .modes {
       display: flex;
-      align-items: center;
       gap: 3px;
       padding: 4px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      border: 1px solid #ffffff0f;
       border-radius: 10px;
-      background: rgba(11, 11, 20, 0.3);
+      background: #0b0b144d;
     }
 
     .mode {
@@ -242,22 +270,25 @@
       color: var(--muted);
       font-size: 12px;
       white-space: nowrap;
+      transition: all 0.2s ease;
     }
 
     .mode.active {
-      background: rgba(162, 145, 218, 0.14);
+      background: #a291da24;
       color: var(--text);
     }
 
     .clear {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 0 8px 12px;
+      padding: 8px;
       border: 0;
       background: transparent;
       color: var(--muted);
       font-size: 12px;
+      transition: color 0.2s ease;
+    }
+
+    .clear:hover {
+      color: var(--text);
     }
 
     .messages {
@@ -266,16 +297,25 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-      overflow-y: auto;
       padding: 2px 2px 30px;
+      overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: #393448 transparent;
+      scroll-behavior: smooth;
     }
 
     .message {
       max-width: 77%;
       line-height: 1.65;
+      animation: fadeIn 0.3s ease forwards;
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message p { margin: 0; }
 
     .assistant {
       align-self: flex-start;
@@ -289,6 +329,9 @@
 
     .welcome {
       width: 77%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       padding: 11px 16px;
       border-radius: 12px;
       color: #b6b2ca;
@@ -300,44 +343,33 @@
       max-width: 68%;
       padding: 16px 20px;
       border-radius: 18px 18px 0 18px;
-      color: #fff;
+      color: white;
       background: var(--gradient);
-    }
-
-    .message p {
-      margin: 0;
-    }
-
-    .assistant-intro,
-    .welcome {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      box-shadow: 0 4px 15px rgba(121, 85, 239, 0.25);
     }
 
     .assistant-intro {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       margin-bottom: 12px;
       color: #c4bfd6;
       font-size: 13px;
     }
 
     .spark {
-      flex: 0 0 auto;
       color: #bb9cff;
       font-size: 19px;
       line-height: 1;
     }
 
-    .options {
-      display: grid;
-      gap: 14px;
-    }
+    .options { display: grid; gap: 14px; }
 
     .option {
       display: grid;
       grid-template-columns: 25px minmax(0, 1fr) 20px;
-      align-items: start;
       gap: 10px;
+      align-items: start;
     }
 
     .option-label {
@@ -348,23 +380,33 @@
     }
 
     .copy {
-      margin-top: 1px;
       padding: 0;
       border: 0;
       background: transparent;
       color: #868199;
       font-size: 17px;
-      line-height: 1.5;
+      transition: color 0.2s ease;
+    }
+
+    .copy:hover {
+      color: var(--text);
     }
 
     .typing {
-      display: flex;
+      display: none;
+      align-self: flex-start;
       align-items: center;
       gap: 12px;
       padding: 11px 15px;
       border-radius: 0 14px 14px 14px;
+      border: 1px solid var(--border);
+      background: var(--card);
       color: var(--muted);
       font-size: 12px;
+    }
+
+    .typing.active {
+      display: flex;
     }
 
     .dots {
@@ -379,45 +421,35 @@
       height: 6px;
       border-radius: 50%;
       background: linear-gradient(135deg, #8b5cf6, #df75ff);
-      box-shadow: 0 0 9px rgba(170, 88, 255, 0.7);
-      animation: dot-jump 1.2s ease-in-out infinite;
+      box-shadow: 0 0 9px #aa58ffb3;
+      animation: jump 1.2s ease-in-out infinite;
     }
 
-    .dot:nth-child(2) {
-      animation-delay: 0.14s;
-    }
+    .dot:nth-child(2) { animation-delay: 0.14s; }
 
     .dot:nth-child(3) {
       background: linear-gradient(135deg, #9368ff, #35dcef);
-      box-shadow: 0 0 9px rgba(83, 185, 255, 0.6);
+      box-shadow: 0 0 9px #53b9ff99;
       animation-delay: 0.28s;
     }
 
-    /* The composer stays at the bottom while messages scroll. */
-    .composer {
-      flex: 0 0 auto;
-      padding-top: 12px;
-    }
+    .composer { flex: 0 0 auto; padding-top: 12px; }
 
     .input-shell {
       display: flex;
       align-items: center;
       gap: 16px;
       padding: 10px 10px 10px 20px;
-      border: 1px solid rgba(157, 113, 242, 0.48);
+      border: 1px solid #9d71f27a;
       border-radius: 16px;
-      background: rgba(21, 20, 34, 0.84);
-      box-shadow:
-        0 0 22px rgba(133, 77, 225, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.025);
+      background: #151422d6;
+      box-shadow: 0 0 22px #854de51a;
       transition: border-color 180ms ease, box-shadow 180ms ease;
     }
 
     .input-shell:focus-within {
       border-color: #b38af8;
-      box-shadow:
-        0 0 0 3px rgba(151, 98, 243, 0.09),
-        0 0 30px rgba(151, 98, 243, 0.2);
+      box-shadow: 0 0 0 3px #9762f317, 0 0 30px #9762f333;
     }
 
     textarea {
@@ -433,9 +465,7 @@
       line-height: 20px;
     }
 
-    textarea::placeholder {
-      color: #8b859f;
-    }
+    textarea::placeholder { color: #8b859f; }
 
     .send {
       width: 44px;
@@ -443,20 +473,24 @@
       flex: 0 0 auto;
       display: grid;
       place-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid #ffffff26;
       border-radius: 12px;
       background: var(--gradient);
-      box-shadow: 0 4px 14px rgba(119, 76, 225, 0.24);
+      box-shadow: 0 4px 14px #774ce13d;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .send svg {
-      width: 21px;
-      height: 21px;
+    .send:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px #774ce166;
     }
+
+    .send:active { transform: translateY(0); }
+
+    .send svg { width: 21px; height: 21px; }
 
     .composer-footer {
       display: flex;
-      align-items: center;
       justify-content: space-between;
       gap: 16px;
       padding-top: 12px;
@@ -464,152 +498,72 @@
       font-size: 11px;
     }
 
-    @keyframes violet-drift {
+    @keyframes drift-purple {
       to { transform: translate(32px, -18px) scale(1.04); }
     }
 
-    @keyframes cyan-drift {
+    @keyframes drift-cyan {
       to { transform: translate(-26px, 24px) scale(1.06); }
     }
 
-    @keyframes rose-drift {
+    @keyframes drift-rose {
       to { transform: translate(20px, 16px) scale(1.03); }
     }
 
-    @keyframes dot-jump {
+    @keyframes jump {
       0%, 40%, 100% { transform: translateY(0); }
       20% { transform: translateY(-5px); }
     }
 
-    @media (max-width: 1150px) {
-      .tagline {
-        display: none;
-      }
-
-      .chat {
-        width: calc(100% - 64px);
-      }
+    @media (max-width: 1100px) {
+      .tagline { display: none; }
     }
 
     @media (max-width: 720px) {
-      body {
-        padding: 12px;
-      }
-
-      .app {
-        height: calc(100svh - 24px);
-        border-radius: 18px;
-      }
-
-      .header {
-        padding: 16px 18px;
-        gap: 12px;
-        flex-wrap: wrap;
-      }
-
-      .brand-name {
-        font-size: 20px;
-      }
-
-      .themes {
-        gap: 4px;
-      }
-
-      .theme {
-        padding: 5px;
-      }
-
-      .theme-name {
-        display: none;
-      }
-
-      .chat {
-        width: calc(100% - 32px);
-        padding-bottom: 16px;
-      }
-
-      .toolbar {
-        padding-bottom: 22px;
-      }
-
-      .mode {
-        padding: 7px 8px;
-        font-size: 10px;
-      }
-
-      .message,
-      .welcome {
-        max-width: 90%;
-      }
-
-      .welcome {
-        width: 90%;
-      }
-
-      .user {
-        max-width: 85%;
-      }
-
-      .composer-footer {
-        font-size: 10px;
-      }
-
-      .keyboard-hint {
-        display: none;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation: none !important;
-        transition: none !important;
-      }
+      body { padding: 12px; }
+      .app { border-radius: 18px; }
+      .header { padding: 14px 16px; gap: 12px; flex-wrap: wrap; }
+      .brand-name { font-size: 36px; }
+      .themes { gap: 3px; }
+      .theme { padding: 5px; }
+      .theme-name { display: none; }
+      .chat { width: calc(100% - 32px); padding-bottom: 16px; }
+      .toolbar { padding-bottom: 22px; }
+      .mode { padding: 7px 8px; font-size: 10px; }
+      .message, .welcome { max-width: 92%; }
+      .welcome { width: 92%; }
+      .user { max-width: 85%; }
+      .keyboard-hint { display: none; }
     }
   </style>
 </head>
 
 <body>
-  <div class="ambient" aria-hidden="true">
-    <div class="rose"></div>
+
+  <div class="mesh" aria-hidden="true">
+    <span></span><span></span><span></span>
   </div>
 
-  <main class="app" aria-label="Fabulari AI chat preview">
+  <main class="app" aria-label="Fabulari chat application">
     <header class="header">
       <div class="brand">
-        <span class="brand-mark" aria-hidden="true">✣</span>
+        <div class="brand-icon">
+          <img src="fabulari-icon.png" alt="Fabulari Icon" onerror="this.style.display='none'">
+        </div>
         <h1 class="brand-name">Fabulari</h1>
         <span class="tagline">Your words, with possibility.</span>
       </div>
 
-      <div class="themes" role="group" aria-label="Theme previews">
-        <button
-          class="theme selected"
-          type="button"
-          aria-label="Cosmic Purple, selected"
-          disabled
-        >
+      <div class="themes" role="group" aria-label="Theme selectors">
+        <button class="theme selected" type="button" onclick="setTheme('purple', this)" aria-label="Cosmic Purple">
           <span class="swatch purple" aria-hidden="true">✓</span>
           <span class="theme-name">Cosmic Purple</span>
         </button>
-
-        <button
-          class="theme"
-          type="button"
-          aria-label="Cyberpunk Cyan"
-          disabled
-        >
+        <button class="theme" type="button" onclick="setTheme('cyan', this)" aria-label="Cyberpunk Cyan">
           <span class="swatch cyan" aria-hidden="true"></span>
           <span class="theme-name">Cyberpunk Cyan</span>
         </button>
-
-        <button
-          class="theme"
-          type="button"
-          aria-label="Sunset Orange"
-          disabled
-        >
+        <button class="theme" type="button" onclick="setTheme('orange', this)" aria-label="Sunset Orange">
           <span class="swatch orange" aria-hidden="true"></span>
           <span class="theme-name">Sunset Orange</span>
         </button>
@@ -618,37 +572,22 @@
 
     <section class="chat" aria-label="Conversation">
       <div class="toolbar">
-        <div class="modes" role="group" aria-label="Reply mode previews">
-          <button class="mode active" type="button" disabled>
-            Public Comments
-          </button>
-          <button class="mode" type="button" disabled>
-            Private DM
-          </button>
-          <button class="mode" type="button" disabled>
-            Business / Collab
-          </button>
+        <div class="modes" role="group" aria-label="Reply mode selectors">
+          <button class="mode active" type="button" onclick="setMode(this)">Public Comments</button>
+          <button class="mode" type="button" onclick="setMode(this)">Private DM</button>
+          <button class="mode" type="button" onclick="setMode(this)">Business / Collab</button>
         </div>
-
-        <button class="clear" type="button" disabled>
-          <span aria-hidden="true">↺</span>
-          Clear
-        </button>
+        <button class="clear" type="button" onclick="clearChat()">↺ &nbsp; Clear</button>
       </div>
 
-      <div class="messages" tabindex="0" aria-label="Sample messages">
+      <div class="messages" id="messagesContainer" tabindex="0" aria-label="Message log">
         <article class="message assistant welcome" aria-label="Fabulari">
           <span class="spark" aria-hidden="true">✣</span>
-          <p>
-            Type your message or custom instructions below to generate options.
-          </p>
+          <p>Type your message or custom instructions below to generate options.</p>
         </article>
 
         <article class="message user" aria-label="Your message">
-          <p>
-            Someone commented “Your new collection is stunning!” on my post.
-            Help me reply warmly, without sounding too salesy.
-          </p>
+          <p>Someone commented “Your new collection is stunning!” on my post. Help me reply warmly, without sounding too salesy.</p>
         </article>
 
         <article class="message assistant" aria-label="Fabulari reply">
@@ -660,86 +599,48 @@
           <div class="options">
             <div class="option">
               <span class="option-label">(A)</span>
-              <p>
-                This made my day. Thank you for the kind words — so glad the
-                new collection speaks to you!
-              </p>
-              <button
-                class="copy"
-                type="button"
-                aria-label="Copy option A"
-                disabled
-              >⧉</button>
+              <p>This made my day. Thank you for the kind words — so glad the new collection speaks to you!</p>
+              <button class="copy" type="button" onclick="copyText(this)" aria-label="Copy option A">⧉</button>
             </div>
 
             <div class="option">
               <span class="option-label">(B)</span>
-              <p>
-                Such a lovely thing to hear! A lot of care went into this
-                collection, and your support means so much.
-              </p>
-              <button
-                class="copy"
-                type="button"
-                aria-label="Copy option B"
-                disabled
-              >⧉</button>
+              <p>Such a lovely thing to hear! A lot of care went into this collection, and your support means so much.</p>
+              <button class="copy" type="button" onclick="copyText(this)" aria-label="Copy option B">⧉</button>
             </div>
 
             <div class="option">
               <span class="option-label">(C)</span>
-              <p>
-                Thank you! Knowing these pieces found a little place in your
-                day is exactly why I love creating them.
-              </p>
-              <button
-                class="copy"
-                type="button"
-                aria-label="Copy option C"
-                disabled
-              >⧉</button>
+              <p>Thank you! Knowing these pieces found a little place in your day is exactly why I love creating them.</p>
+              <button class="copy" type="button" onclick="copyText(this)" aria-label="Copy option C">⧉</button>
             </div>
           </div>
         </article>
+      </div>
 
-        <article class="message user" aria-label="Your message">
-          <p>Make option B a little shorter and more playful.</p>
-        </article>
-
-        <div class="message assistant typing" role="status">
-          <div class="dots" aria-hidden="true">
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-          </div>
-          <span>Refining your reply</span>
+      <!-- Typing Indicator Element -->
+      <div class="message assistant typing" id="typingIndicator" role="status">
+        <div class="dots" aria-hidden="true">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
         </div>
+        <span id="typingText">Refining your reply</span>
       </div>
 
       <footer class="composer">
         <div class="input-shell">
           <textarea
+            id="userInput"
             rows="1"
-            aria-label="Message preview"
+            aria-label="Message input"
             placeholder="Send a message or type instructions..."
-            readonly
           ></textarea>
 
-          <button
-            class="send"
-            type="button"
-            aria-label="Send message"
-            disabled
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
+          <button class="send" id="sendBtn" type="button" onclick="handleSend()" aria-label="Send message">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true">
               <path d="M12 19V5M5 12l7-7 7 7"></path>
             </svg>
           </button>
@@ -754,5 +655,122 @@
       </footer>
     </section>
   </main>
+
+  <script>
+    const messagesContainer = document.getElementById('messagesContainer');
+    const userInput = document.getElementById('userInput');
+    const typingIndicator = document.getElementById('typingIndicator');
+
+    // Theme Switcher Logic
+    function setTheme(themeName, btn) {
+      document.body.className = '';
+      if (themeName !== 'purple') {
+        document.body.classList.add(`theme-${themeName}`);
+      }
+
+      document.querySelectorAll('.theme').forEach(t => {
+        t.classList.remove('selected');
+        const swatch = t.querySelector('.swatch');
+        swatch.textContent = '';
+      });
+
+      btn.classList.add('selected');
+      btn.querySelector('.swatch').textContent = '✓';
+    }
+
+    // Mode Switcher Logic
+    function setMode(btn) {
+      document.querySelectorAll('.mode').forEach(m => m.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    // Clear Chat Logic
+    function clearChat() {
+      messagesContainer.innerHTML = `
+        <article class="message assistant welcome" aria-label="Fabulari">
+          <span class="spark" aria-hidden="true">✣</span>
+          <p>Chat cleared. Type your message or custom instructions below.</p>
+        </article>
+      `;
+    }
+
+    // Copy Text Logic
+    function copyText(btn) {
+      const text = btn.previousElementSibling.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const original = btn.textContent;
+        btn.textContent = '✓';
+        setTimeout(() => { btn.textContent = original; }, 1200);
+      });
+    }
+
+    // Scroll to bottom helper
+    function scrollToBottom() {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // Append Message to UI
+    function appendMessage(htmlContent, senderClass) {
+      const article = document.createElement('article');
+      article.className = `message ${senderClass}`;
+      article.innerHTML = htmlContent;
+      messagesContainer.appendChild(article);
+      scrollToBottom();
+    }
+
+    // Handle Sending Messages & Simulated AI Response
+    function handleSend() {
+      const text = userInput.value.trim();
+      if (!text) return;
+
+      // Add user message
+      appendMessage(`<p>${escapeHtml(text)}</p>`, 'user');
+      userInput.value = '';
+      userInput.style.height = '28px';
+
+      // Show typing indicator
+      messagesContainer.appendChild(typingIndicator);
+      typingIndicator.classList.add('active');
+      scrollToBottom();
+
+      // Simulate AI response stream
+      setTimeout(() => {
+        typingIndicator.classList.remove('active');
+        
+        const botReply = `
+          <div class="assistant-intro">
+            <span class="spark" aria-hidden="true">✣</span>
+            <p>Here is a refined option based on your request:</p>
+          </div>
+          <div class="options">
+            <div class="option">
+              <span class="option-label">(1)</span>
+              <p>That means the world! So grateful it resonated with your style ✨</p>
+              <button class="copy" type="button" onclick="copyText(this)">⧉</button>
+            </div>
+          </div>
+        `;
+        appendMessage(botReply, 'assistant');
+      }, 1500);
+    }
+
+    // Simple HTML escape for safety
+    function escapeHtml(string) {
+      return string.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // Input auto-resize & keyboard listeners
+    userInput.addEventListener('input', function() {
+      this.style.height = '28px';
+      this.style.height = (this.scrollHeight - 6) + 'px';
+    });
+
+    userInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSend();
+      }
+    });
+  </script>
 </body>
 </html>
