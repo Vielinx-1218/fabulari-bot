@@ -119,43 +119,51 @@
       isolation: isolate;
     }
 
-    .brand::before {
-      content: "";
-      position: absolute;
-      left: 28px;
-      top: 50%;
-      width: 160px;
-      height: 48px;
-      transform: translateY(-50%);
-      border-radius: 50%;
-      background: linear-gradient(110deg, #8853ed4d, #d07dff33, #5b9bff1a);
-      filter: blur(22px);
-      z-index: -1;
-      pointer-events: none;
-    }
-
+    /* Standalone logo with interactive rotating background shadow on hover */
     .brand-icon {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       flex: 0 0 auto;
       position: relative;
-      overflow: hidden;
-      border: 1px solid #b58aff66;
-      border-radius: 12px;
-      background: #0b0a19;
-      box-shadow:
-        0 0 16px #a78bfa55,
-        0 4px 12px #0003;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .brand-icon::before {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, #7955ef, #c465df, #31e4e8, #7955ef);
+      filter: blur(10px);
+      opacity: 0;
+      z-index: -1;
+      transition: opacity 0.3s ease;
+    }
+
+    .brand-icon:hover {
+      transform: scale(1.08);
+    }
+
+    .brand-icon:hover::before {
+      opacity: 0.85;
+      animation: rotateGlow 3s linear infinite;
     }
 
     .brand-icon img {
-      position: absolute;
-      width: 217.4%;
-      height: 217.4%;
-      max-width: none;
-      left: -58.7%;
-      top: -58.7%;
+      width: 100%;
+      height: 100%;
       object-fit: contain;
+      filter: drop-shadow(0 4px 10px rgba(121, 85, 239, 0.35));
+    }
+
+    @keyframes rotateGlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     .brand-name {
@@ -302,44 +310,60 @@
       scroll-behavior: smooth;
     }
 
-    /* Welcome Hero Screen */
+    /* Centered Welcome Hero Screen with larger logo & catchphrase */
     .welcome-hero {
       margin: auto;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
       padding: 20px;
       animation: fadeIn 0.4s ease forwards;
     }
 
     .hero-logo-large {
-      width: 72px;
-      height: 72px;
-      border-radius: 20px;
-      border: 1px solid #b58aff66;
-      background: #0b0a19;
-      box-shadow: 0 0 28px #a78bfa55, 0 8px 20px #0005;
+      width: 80px;
+      height: 80px;
       position: relative;
-      overflow: hidden;
-      display: grid;
-      place-items: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .hero-logo-large::before {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, #7955ef, #c465df, #31e4e8, #7955ef);
+      filter: blur(16px);
+      opacity: 0.6;
+      z-index: -1;
+      transition: opacity 0.3s ease;
+      animation: rotateGlow 6s linear infinite;
+    }
+
+    .hero-logo-large:hover {
+      transform: scale(1.06);
+    }
+
+    .hero-logo-large:hover::before {
+      opacity: 1;
     }
 
     .hero-logo-large img {
-      position: absolute;
-      width: 217.4%;
-      height: 217.4%;
-      max-width: none;
-      left: -58.7%;
-      top: -58.7%;
+      width: 100%;
+      height: 100%;
       object-fit: contain;
+      filter: drop-shadow(0 6px 16px rgba(121, 85, 239, 0.4));
     }
 
     .welcome-hero h2 {
       margin: 0;
-      font-size: 1.8rem;
+      font-size: 2rem;
       font-weight: 500;
       letter-spacing: -0.01em;
       background: linear-gradient(90deg, #eeedf7, #b47fff);
@@ -577,7 +601,7 @@
       <button class="clear" type="button" onclick="clearChat()">↺ &nbsp; Clear</button>
     </div>
 
-    <!-- Messages Container with Centered Welcome Hero featuring the Icon Logo -->
+    <!-- Messages Container with Centered Welcome Hero -->
     <div class="messages" id="messagesContainer" tabindex="0" aria-label="Message log">
       <div class="welcome-hero" id="welcomeHero">
         <div class="hero-logo-large">
