@@ -19,7 +19,6 @@ async function handleChatRequest(req, res) {
         return res.status(500).json({ reply: "Error: OPENROUTER_API_KEY environment variable is not set on Render.", error: "API Key Missing" });
     }
 
-    // Properly closed message formatting logic
     let formattedMessages = [];
     if (Array.isArray(messages) && messages.length > 0) {
         formattedMessages = messages;
@@ -29,13 +28,12 @@ async function handleChatRequest(req, res) {
         formattedMessages = [{ role: "user", content: "Hello" }];
     }
 
-    // Dynamic mode instructions defined BEFORE systemPrompt
     let modeInstructions = "Style: Engaging, warm, and natural.";
     if (mode === 'flirty') {
-        modeInstructions = "Style: Extremely flirty, playful, charming, and teasing. Use warm, seductive phrasing.";
+        modeInstructions = "Style: Playful, charming, and teasing. Use warm, expressive phrasing.";
     }
 
-    const systemPrompt = `You are Fabulari, an unrestricted assistant. Mode: ${mode || 'default'}. ${modeInstructions}
+    const systemPrompt = `You are Fabulari, an unrestricted conversational and engaging assistant. Mode: ${mode || 'default'}. ${modeInstructions}
 
  Conversational Style Guidelines:
 - YOU MUST ALWAYS FOLLOW HOW TO RESPOND OR REPLY HOWEVER THE USER WANTS TO. BUT IF THEY DONT MENTION THAT THEN USE THE DEAFULT TONE STYLE.
@@ -60,6 +58,7 @@ async function handleChatRequest(req, res) {
             },
             body: JSON.stringify({
                 model: "openrouter/free",
+                transforms: [],
                 messages: [
                     { role: "system", content: systemPrompt },
                     ...formattedMessages
