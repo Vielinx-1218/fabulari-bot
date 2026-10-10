@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,16 +7,10 @@
   <meta name="color-scheme" content="dark">
   <title>Fabulari</title>
 
-  <!-- Fallback / Direct Data URI Favicon to guarantee browser tab icon loads -->
- <link rel="icon" type="image/png" sizes="32x32" href="fabulari-icon.png">
-
-
+  <link rel="icon" type="image/png" sizes="32x32" href="fabulari-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap"
-    rel="stylesheet"
-  >
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -25,21 +20,6 @@
       --text: #eeedf7;
       --muted: #9492aa;
       --gradient: linear-gradient(115deg, #7955ef, #c465df);
-    }
-
-    /* Theme Variants */
-    body.theme-cyan {
-      --gradient: linear-gradient(115deg, #2788f1, #31e4e8);
-    }
-    body.theme-cyan .dot:nth-child(3) {
-      background: linear-gradient(135deg, #2788f1, #31e4e8);
-    }
-
-    body.theme-orange {
-      --gradient: linear-gradient(115deg, #ffc15c, #ff547c);
-    }
-    body.theme-orange .dot:nth-child(3) {
-      background: linear-gradient(135deg, #ffc15c, #ff547c);
     }
 
     * { box-sizing: border-box; }
@@ -53,11 +33,9 @@
       overflow: hidden;
       background: var(--bg);
       color: var(--text);
-      font: 14px/1.6 system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
+      font: 14px/1.6 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       -webkit-font-smoothing: antialiased;
       isolation: isolate;
-      transition: background 0.3s ease;
     }
 
     button, textarea { font: inherit; }
@@ -77,29 +55,22 @@
     }
 
     .mesh span:nth-child(1) {
-      background: radial-gradient(
-        ellipse at 35% 30%, #7036c83b, transparent 48%
-      );
+      background: radial-gradient(ellipse at 35% 30%, #7036c83b, transparent 48%);
       animation: drift-purple 18s ease-in-out infinite alternate;
     }
 
     .mesh span:nth-child(2) {
-      background: radial-gradient(
-        ellipse at 90% 70%, #1aa4bd20, transparent 42%
-      );
+      background: radial-gradient(ellipse at 90% 70%, #1aa4bd20, transparent 42%);
       animation: drift-cyan 22s ease-in-out infinite alternate;
     }
 
     .mesh span:nth-child(3) {
-      background: radial-gradient(
-        ellipse at 40% 95%, #b7377c22, transparent 40%
-      );
+      background: radial-gradient(ellipse at 40% 95%, #b7377c22, transparent 40%);
       animation: drift-rose 20s ease-in-out infinite alternate;
     }
 
-    /* Edge-to-edge header */
     .header {
-      height: 76px;
+      min-height: 76px;
       padding: 0 32px;
       display: flex;
       align-items: center;
@@ -113,45 +84,18 @@
     }
 
     .brand {
-      position: relative;
       display: flex;
       align-items: center;
       gap: 14px;
-      isolation: isolate;
     }
 
-    /* Top-Left Header Logo */
     .brand-icon {
       width: 46px;
       height: 46px;
       flex: 0 0 auto;
-      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .brand-icon::before {
-      content: "";
-      position: absolute;
-      inset: -6px;
-      border-radius: 50%;
-      background: conic-gradient(from 0deg, #7955ef, #c465df, #31e4e8, #7955ef);
-      filter: blur(12px);
-      opacity: 0;
-      z-index: -1;
-      transition: opacity 0.3s ease;
-    }
-
-    .brand-icon:hover {
-      transform: scale(1.08);
-    }
-
-    .brand-icon:hover::before {
-      opacity: 0.85;
-      animation: rotateGlow 3s linear infinite;
     }
 
     .brand-icon img {
@@ -159,11 +103,6 @@
       height: 100%;
       object-fit: contain;
       filter: drop-shadow(0 4px 10px rgba(121, 85, 239, 0.4));
-    }
-
-    @keyframes rotateGlow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
     }
 
     .brand-name {
@@ -174,83 +113,18 @@
       font-weight: 400;
       line-height: 1.2;
       white-space: nowrap;
-      cursor: pointer;
-      background: linear-gradient(
-        90deg, #e0c3ff, #b47fff 40%, #9b5fef 70%, #d4a0ff
-      );
+      background: linear-gradient(90deg, #e0c3ff, #b47fff 40%, #9b5fef 70%, #d4a0ff);
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
-      filter:
-        drop-shadow(0 4px 9px #9b5fef80)
-        drop-shadow(0 0 16px #c084fc55);
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
+      filter: drop-shadow(0 4px 9px #9b5fef80);
     }
 
-    .brand-name:hover {
-      transform: translateY(-2px);
-      filter:
-        drop-shadow(0 6px 14px #b47fffb3)
-        drop-shadow(0 0 22px #c084fc88);
-    }
-
-    .tagline {
-      color: var(--muted);
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .themes {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .theme {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 10px;
-      border: 1px solid transparent;
-      border-radius: 999px;
-      background: transparent;
-      color: var(--muted);
-      font-size: 12px;
-      white-space: nowrap;
-      transition: all 0.2s ease;
-    }
-
-    .theme:hover {
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text);
-    }
-
-    .theme.selected {
-      border-color: #bba6ff40;
-      background: #9076da14;
-      color: var(--text);
-    }
-
-    .swatch {
-      width: 20px;
-      height: 20px;
-      display: grid;
-      place-items: center;
-      flex: 0 0 auto;
-      border-radius: 50%;
-      color: white;
-      font-size: 11px;
-    }
-
-    .purple { background: linear-gradient(135deg, #7554f4, #c568df); }
-    .cyan { background: linear-gradient(135deg, #31e4e8, #2788f1); }
-    .orange { background: linear-gradient(135deg, #ffc15c, #ff547c); }
-
-    /* Main chat section */
     .chat {
       width: min(960px, 100%);
       height: calc(100vh - 76px);
       height: calc(100svh - 76px);
+      min-height: 0;
       margin: 0 auto;
       padding: 16px 24px 20px;
       display: flex;
@@ -259,6 +133,7 @@
     }
 
     .toolbar {
+      width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -269,6 +144,7 @@
 
     .modes {
       display: flex;
+      flex-wrap: wrap;
       gap: 3px;
       padding: 4px;
       border: 1px solid #ffffff0f;
@@ -284,7 +160,6 @@
       color: var(--muted);
       font-size: 12px;
       white-space: nowrap;
-      transition: all 0.2s ease;
     }
 
     .mode.active {
@@ -298,19 +173,18 @@
       background: transparent;
       color: var(--muted);
       font-size: 12px;
-      transition: color 0.2s ease;
+      flex: 0 0 auto;
     }
 
-    .clear:hover {
-      color: var(--text);
-    }
+    .clear:hover { color: var(--text); }
 
-    /* Scrollable messages container */
     .messages {
+      width: 100%;
       min-height: 0;
-      flex: 1;
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
+      align-items: stretch;
       gap: 16px;
       padding: 4px 4px 16px;
       overflow-y: auto;
@@ -319,7 +193,6 @@
       scroll-behavior: smooth;
     }
 
-    /* Centered Welcome Hero Screen */
     .welcome-hero {
       margin: auto;
       text-align: center;
@@ -338,8 +211,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: transform 0.3s ease;
     }
 
     .hero-logo-large::before {
@@ -351,16 +222,7 @@
       filter: blur(32px);
       opacity: 0.7;
       z-index: -1;
-      transition: opacity 0.3s ease;
       animation: rotateGlow 6s linear infinite;
-    }
-
-    .hero-logo-large:hover {
-      transform: scale(1.05);
-    }
-
-    .hero-logo-large:hover::before {
-      opacity: 1;
     }
 
     .hero-logo-large img {
@@ -381,12 +243,13 @@
       color: transparent;
     }
 
-    /* Messenger Row Layout (Avatar + Bubble) */
     .message-row {
       display: flex;
       align-items: flex-end;
       gap: 10px;
+      width: fit-content;
       max-width: 78%;
+      min-width: 0;
       animation: fadeIn 0.3s ease forwards;
     }
 
@@ -395,9 +258,7 @@
       justify-content: flex-end;
     }
 
-    .message-row.assistant {
-      align-self: flex-start;
-    }
+    .message-row.assistant { align-self: flex-start; }
 
     .chat-avatar {
       width: 32px;
@@ -420,40 +281,20 @@
       object-fit: contain;
     }
 
-    /* Chat Bubbles */
     .message {
+      min-width: 0;
+      overflow-wrap: anywhere;
       line-height: 1.6;
       padding: 12px 18px;
       font-size: 0.95rem;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+    .message p {
+      margin: 0;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
 
-    @keyframes fabulariTyping {
-    0%, 60%, 100% {
-        transform: translateY(0);
-        opacity: 0.4;
-    }
-    30% {
-        transform: translateY(-5px);
-        opacity: 1;
-    }
-}
-
-/* Dark theme support */
-body.dark .typing-indicator {
-    background: #333333;
-}
-
-body.dark .typing-indicator span {
-    background: #ffffff;
-
-    .message p { margin: 0; word-break: break-word; }
-
-    /* Assistant Bubble */
     .message-row.assistant .message {
       background: var(--card);
       border: 1px solid var(--border);
@@ -463,7 +304,6 @@ body.dark .typing-indicator span {
       color: var(--text);
     }
 
-    /* User Bubble */
     .message-row.user .message {
       background: var(--gradient);
       border-radius: 18px 18px 4px 18px;
@@ -471,18 +311,18 @@ body.dark .typing-indicator span {
       box-shadow: 0 4px 15px rgba(121, 85, 239, 0.25);
     }
 
-    /* Typing Indicator Row */
+    /* Animated three-dot typing indicator */
     .typing-row {
       display: none;
       align-self: flex-start;
       align-items: flex-end;
       gap: 10px;
+      flex: 0 0 auto;
+      padding: 4px;
       animation: fadeIn 0.3s ease forwards;
     }
 
-    .typing-row.active {
-      display: flex;
-    }
+    .typing-row.active { display: flex; }
 
     .typing {
       display: flex;
@@ -520,20 +360,23 @@ body.dark .typing-indicator span {
       animation-delay: 0.28s;
     }
 
-    /* Composer */
     .composer {
       flex: 0 0 auto;
+      width: 100%;
       padding-top: 8px;
+      margin-top: auto;
     }
 
     .input-shell {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
+      width: 100%;
+      min-width: 0;
       padding: 10px 10px 10px 20px;
       border: 1px solid #9d71f27a;
       border-radius: 16px;
-      background: #151422d6;
+      background: #151422e8;
       box-shadow: 0 0 22px #854de51a;
       transition: border-color 180ms ease, box-shadow 180ms ease;
     }
@@ -543,25 +386,34 @@ body.dark .typing-indicator span {
       box-shadow: 0 0 0 3px #9762f317, 0 0 30px #9762f333;
     }
 
-    textarea {
-      width: 100%;
+    .input-shell textarea#userInput {
+      display: block;
+      flex: 1 1 auto;
+      width: 0;
       min-width: 0;
+      max-width: 100%;
       height: 28px;
+      min-height: 28px;
+      max-height: 160px;
+      margin: 0;
       padding: 4px 0;
       resize: none;
+      overflow-y: auto;
       outline: none;
       border: 0;
       color: var(--text);
       background: transparent;
       line-height: 20px;
+      box-shadow: none;
     }
 
     textarea::placeholder { color: #8b859f; }
 
     .send {
       width: 42px;
+      min-width: 42px;
       height: 42px;
-      flex: 0 0 auto;
+      flex: 0 0 42px;
       display: grid;
       place-items: center;
       border: 1px solid #ffffff26;
@@ -577,7 +429,7 @@ body.dark .typing-indicator span {
     }
 
     .send:active { transform: translateY(0); }
-
+    .send:disabled { opacity: 0.6; cursor: wait; }
     .send svg { width: 20px; height: 20px; }
 
     .composer-footer {
@@ -587,6 +439,16 @@ body.dark .typing-indicator span {
       padding-top: 8px;
       color: #80798f;
       font-size: 11px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes rotateGlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     @keyframes drift-purple {
@@ -602,54 +464,52 @@ body.dark .typing-indicator span {
     }
 
     @keyframes jump {
-      0%, 40%, 100% { transform: translateY(0); }
-      20% { transform: translateY(-5px); }
-    }
-
-    @media (max-width: 1100px) {
-      .tagline { display: none; }
+      0%, 40%, 100% { transform: translateY(0); opacity: 0.5; }
+      20% { transform: translateY(-5px); opacity: 1; }
     }
 
     @media (max-width: 720px) {
-      .header { padding: 0 16px; gap: 12px; }
+      .header { padding: 0 16px; }
       .brand-icon { width: 38px; height: 38px; }
       .hero-logo-large { width: 140px; height: 140px; }
       .brand-name { font-size: 34px; }
-      .themes { gap: 3px; }
-      .theme { padding: 5px; }
-      .theme-name { display: none; }
       .chat { width: 100%; padding: 12px 16px; }
-      .keyboard-hint { display: none; }
+      .toolbar { align-items: flex-start; }
+      .modes { flex-wrap: wrap; }
+      .mode { padding: 6px 8px; }
+      .message-row { max-width: 92%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
     }
   </style>
 </head>
 
 <body>
-
   <div class="mesh" aria-hidden="true">
     <span></span><span></span><span></span>
   </div>
 
-  <!-- Header -->
   <header class="header">
     <div class="brand">
       <div class="brand-icon">
         <img src="fabulari-icon.png" alt="Fabulari Icon" onerror="this.style.display='none'">
       </div>
       <h1 class="brand-name">Fabulari</h1>
-     
     </div>
-
-    
   </header>
 
-  <!-- Main Chat Section -->
   <section class="chat" aria-label="Conversation">
-    
+    <div class="toolbar">
+     
       <button class="clear" type="button" onclick="clearChat()">↺ &nbsp; Clear</button>
     </div>
 
-    <!-- Messages Container with Welcome Hero -->
     <div class="messages" id="messagesContainer" tabindex="0" aria-label="Message log">
       <div class="welcome-hero" id="welcomeHero">
         <div class="hero-logo-large">
@@ -659,10 +519,9 @@ body.dark .typing-indicator span {
       </div>
     </div>
 
-    <!-- Messenger-style Typing Indicator Row with Bot Avatar -->
-    <div class="typing-row" id="typingIndicator" role="status">
+    <div class="typing-row" id="typingIndicator" role="status" aria-live="polite">
       <div class="chat-avatar">
-        <img src="fabulari-icon.png" alt="Bot Avatar" onerror="this.style.display='none'">
+        <img src="fabulari-icon.png" alt="" onerror="this.style.display='none'">
       </div>
       <div class="message typing">
         <div class="dots" aria-hidden="true">
@@ -680,7 +539,7 @@ body.dark .typing-indicator span {
           id="userInput"
           rows="1"
           aria-label="Message input"
-          placeholder="Send a message or type instructions..."
+          placeholder="Say something..."
         ></textarea>
 
         <button class="send" id="sendBtn" type="button" onclick="handleSend()" aria-label="Send message">
@@ -694,226 +553,188 @@ body.dark .typing-indicator span {
 
       <div class="composer-footer">
         <span>A little inspiration. Always your voice.</span>
-       <span class="keyboard-hint">
-        
-        </span>
+        <span class="keyboard-hint"></span>
       </div>
     </footer>
   </section>
 
-
-<script>
-  const messagesContainer = document.getElementById('messagesContainer');
-  const userInput = document.getElementById('userInput');
-
-  let conversationHistory = [];
-  let currentMode = 'default';
-  let isSending = false;
-
-  function setTheme(themeName, btn) {
-    document.body.className = '';
-
-    if (themeName !== 'purple') {
-      document.body.classList.add(`theme-${themeName}`);
-    }
-
-    document.querySelectorAll('.theme').forEach(t => {
-      t.classList.remove('selected');
-      t.querySelector('.swatch').textContent = '';
-    });
-
-    btn.classList.add('selected');
-    btn.querySelector('.swatch').textContent = '✓';
-  }
-
-  function setMode(btn) {
-    document.querySelectorAll('.mode').forEach(m =>
-      m.classList.remove('active')
-    );
-
-    btn.classList.add('active');
-
-    const label = btn.textContent.trim().toLowerCase();
-
-    if (label.includes('private')) {
-      currentMode = 'private_dm';
-    } else if (label.includes('business')) {
-      currentMode = 'business_collab';
-    } else {
-      currentMode = 'default';
-    }
-  }
-
-  function clearChat() {
-    conversationHistory = [];
-
-    messagesContainer.innerHTML = `
-      <div class="welcome-hero" id="welcomeHero">
-        <div class="hero-logo-large">
-          <img src="fabulari-icon.png"
-               alt="Fabulari Logo"
-               onerror="this.style.display='none'">
-        </div>
-        <h2>Where words find their voice.</h2>
-      </div>
-    `;
-  }
-
-  
-function showTypingIndicator() {
-    removeTypingIndicator();
-
-    const indicator = document.createElement("div");
-    indicator.id = "fabulari-typing";
-    indicator.className = "typing-indicator";
-
-    for (let i = 0; i < 3; i++) {
-        indicator.appendChild(document.createElement("span"));
-    }
-
-    chatMessages.appendChild(indicator);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-function removeTypingIndicator() {
-    const indicator = document.getElementById("fabulari-typing");
-    if (indicator) {
-        indicator.remove();
-    }
-}
-
-
-  function scrollToBottom() {
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  }
-
-  function escapeHtml(string) {
-    return String(string)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  }
-
-  function appendMessage(content, senderClass) {
-    const hero = document.getElementById('welcomeHero');
-    if (hero) hero.remove();
-
-    const row = document.createElement('div');
-    row.className = `message-row ${senderClass}`;
-
-    if (senderClass === 'assistant') {
-      const avatar = document.createElement('div');
-      avatar.className = 'chat-avatar';
-
-      const img = document.createElement('img');
-      img.src = 'fabulari-icon.png';
-      img.alt = 'Fabulari';
-
-      avatar.appendChild(img);
-      row.appendChild(avatar);
-    }
-
-    const article = document.createElement('article');
-    article.className = 'message';
-
-    const paragraph = document.createElement('p');
-    paragraph.textContent = content;
-
-    article.appendChild(paragraph);
-    row.appendChild(article);
-    messagesContainer.appendChild(row);
-
-    scrollToBottom();
-  }
-
-  async function handleSend() {
-    const text = userInput.value.trim();
-
-    if (!text || isSending) return;
-
-    isSending = true;
-
-    appendMessage(text, 'user');
-
-    conversationHistory.push({
-      role: 'user',
-      content: text
-    });
-
-    userInput.value = '';
-    userInput.style.height = '28px';
-
+  <script>
+    const messagesContainer = document.getElementById('messagesContainer');
+    const userInput = document.getElementById('userInput');
+    const typingIndicator = document.getElementById('typingIndicator');
     const sendBtn = document.getElementById('sendBtn');
-    if (sendBtn) sendBtn.disabled = true;
 
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          messages: conversationHistory,
-          mode: currentMode
-        })
+    let conversationHistory = [];
+    let currentMode = 'default';
+    let isSending = false;
+
+    function setMode(btn) {
+      document.querySelectorAll('.mode').forEach(mode => {
+        mode.classList.remove('active');
       });
 
-      const data = await response.json();
+      btn.classList.add('active');
 
-      if (!response.ok) {
-        throw new Error(
-          data.reply || `Request failed (${response.status})`
-        );
+      const label = btn.textContent.trim().toLowerCase();
+
+      if (label.includes('private')) {
+        currentMode = 'private_dm';
+      } else if (label.includes('business')) {
+        currentMode = 'business_collab';
+      } else {
+        currentMode = 'default';
       }
+    }
 
-      const reply = data.reply || data.text || data.result;
+    function scrollToBottom() {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
 
-      if (typeof reply !== 'string' || !reply.trim()) {
-        throw new Error('The server returned an empty response.');
-      }
+    function clearChat() {
+      if (isSending) return;
 
-      conversationHistory.push({
-        role: 'assistant',
-        content: reply
-      });
+      conversationHistory = [];
 
-      appendMessage(reply, 'assistant');
+      messagesContainer.innerHTML = `
+        <div class="welcome-hero" id="welcomeHero">
+          <div class="hero-logo-large">
+            <img src="fabulari-icon.png"
+                 alt="Fabulari Logo"
+                 onerror="this.style.display='none'">
+          </div>
+          <h2>Where words find their voice.</h2>
+        </div>
+      `;
 
-    } catch (error) {
-      console.error('Chat request failed:', error);
-
-      appendMessage(
-        `Unable to get a response: ${error.message}. Please try again.`,
-        'assistant'
-      );
-
-      // Remove the failed user turn from history so it
-      // can be submitted again without duplicating it.
-      conversationHistory.pop();
-
-    } finally {
-      isSending = false;
-
-      if (sendBtn) sendBtn.disabled = false;
-
+      typingIndicator.classList.remove('active');
       userInput.focus();
     }
-  }
 
-  userInput.addEventListener('input', function() {
-    this.style.height = '28px';
-    this.style.height = (this.scrollHeight - 6) + 'px';
-  });
+    function appendMessage(content, senderClass) {
+      const hero = document.getElementById('welcomeHero');
+      if (hero) hero.remove();
 
-  userInput.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault();
-      handleSend();
+      const row = document.createElement('div');
+      row.className = `message-row ${senderClass}`;
+
+      if (senderClass === 'assistant') {
+        const avatar = document.createElement('div');
+        avatar.className = 'chat-avatar';
+
+        const img = document.createElement('img');
+        img.src = 'fabulari-icon.png';
+        img.alt = 'Fabulari';
+        img.onerror = function() { this.style.display = 'none'; };
+
+        avatar.appendChild(img);
+        row.appendChild(avatar);
+      }
+
+      const article = document.createElement('article');
+      article.className = 'message';
+
+      const paragraph = document.createElement('p');
+      paragraph.textContent = content;
+
+      article.appendChild(paragraph);
+      row.appendChild(article);
+      messagesContainer.appendChild(row);
+
+      scrollToBottom();
     }
-  });
-</script>
 
+    async function handleSend() {
+      const text = userInput.value.trim();
+
+      if (!text || isSending) return;
+
+      isSending = true;
+      sendBtn.disabled = true;
+      typingIndicator.classList.add('active');
+
+      appendMessage(text, 'user');
+
+      conversationHistory.push({
+        role: 'user',
+        content: text
+      });
+
+      userInput.value = '';
+      userInput.style.height = '28px';
+      scrollToBottom();
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            messages: conversationHistory,
+            mode: currentMode
+          })
+        });
+
+        let data;
+
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error('The server returned an invalid response.');
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            data.reply || data.error || `Request failed (${response.status})`
+          );
+        }
+
+        const reply = data.reply || data.text || data.result;
+
+        if (typeof reply !== 'string' || !reply.trim()) {
+          throw new Error('The server returned an empty response.');
+        }
+
+        conversationHistory.push({
+          role: 'assistant',
+          content: reply
+        });
+
+        appendMessage(reply, 'assistant');
+
+      } catch (error) {
+        console.error('Chat request failed:', error);
+
+        appendMessage(
+          `Unable to get a response: ${error.message}. Please try again.`,
+          'assistant'
+        );
+
+        // Remove the failed user message from history.
+        const lastMessage = conversationHistory[conversationHistory.length - 1];
+        if (lastMessage && lastMessage.role === 'user' && lastMessage.content === text) {
+          conversationHistory.pop();
+        }
+
+      } finally {
+        typingIndicator.classList.remove('active');
+        isSending = false;
+        sendBtn.disabled = false;
+        userInput.focus();
+      }
+    }
+
+    userInput.addEventListener('input', function() {
+      this.style.height = '28px';
+      this.style.height = Math.min(this.scrollHeight, 160) + 'px';
+    });
+
+    userInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        handleSend();
+      }
+    });
+  </script>
 </body>
 </html>
