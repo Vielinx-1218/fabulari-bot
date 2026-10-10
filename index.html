@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fabulari</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #181116;
+      color: #f3e8f0;
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* Sidebar Layout */
+    .sidebar {
+      width: 280px;
+      background-color: #241722;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #3d243a;
+      padding: 20px 16px;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    /* Pink Gradient Title */
+    .brand-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #ff2b85 0%, #ff80bf 50%, #ffb3da 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      padding-bottom: 8px;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #3d243a;
+      padding-bottom: 12px;
+    }
+
+    .clear-btn {
+      background: #2e1c2b;
+      border: 1px solid #542d4f;
+      color: #ff80bf;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .clear-btn:hover {
+      background: #3d243a;
+      border-color: #ff2b85;
+      color: #fff;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control-label {
+      font-size: 0.85rem;
+      color: #ffb3da;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    select {
+      width: 100%;
+      background: #181116;
+      border: 1px solid #542d4f;
+      color: #f3e8f0;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    select:focus {
+      border-color: #ff2b85;
+    }
+
+    /* Main Chat Window */
+    .main-chat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: #181116;
+      position: relative;
+    }
+
+    .messages-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message-row {
+      display: flex;
+      padding: 16px 24px;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      gap: 16px;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .user-avatar {
+      background: #7a2266;
+      color: #fff;
+    }
+
+    .assistant-avatar {
+      background: linear-gradient(135deg, #ff2b85, #d60062);
+      color: #fff;
+    }
+
+    .message-content {
+      flex: 1;
+      line-height: 1.6;
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .message-user {
+      color: #f3e8f0;
+    }
+
+    .message-assistant {
+      color: #e2cadb;
+    }
+
+    /* Interactive Option Cards */
+    .option-card {
+      background: #281926;
+      border: 1px solid #472642;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-top: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .option-card:hover {
+      background: #362033;
+      border-color: #ff2b85;
+      box-shadow: 0 0 12px rgba(255, 43, 133, 0.2);
+    }
+
+    .option-card .copy-hint {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      font-size: 0.75rem;
+      color: #ff80bf;
+      display: none;
+      font-weight: 600;
+    }
+
+    .option-card:hover .copy-hint {
+      display: block;
+    }
+
+    /* Bottom Input Container */
+    .input-container {
+      padding: 16px 24px 28px 24px;
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .input-box {
+      position: relative;
+      background: #281926;
+      border: 1px solid #542d4f;
+      border-radius: 14px;
+      padding: 14px 48px 14px 18px;
+      display: flex;
+      align-items: center;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input-box:focus-within {
+      border-color: #ff2b85;
+      box-shadow: 0 0 10px rgba(255, 43, 133, 0.25);
+    }
+
+    textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #f3e8f0;
+      font-size: 1rem;
+      outline: none;
+      resize: none;
+      height: 26px;
+      max-height: 160px;
+      font-family: inherit;
+    }
+
+    textarea::placeholder {
+      color: #8c6083;
+    }
+
+    .send-btn {
+      position: absolute;
+      right: 12px;
+      bottom: 11px;
+      background: linear-gradient(135deg, #ff2b85, #d60062);
+      border: none;
+      color: #fff;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s ease, transform 0.1s ease;
+    }
+
+    .send-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .send-btn:disabled {
+      background: #472642;
+      cursor: not-allowed;
+      opacity: 0.5;
+      transform: none;
+    }
+
+    .send-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h1 class="brand-title">FABULARI</h1>
+      <button class="clear-btn" onclick="clearChat()">Clear</button>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="modeSelect">Mode Baseline</label>
+      <select id="modeSelect">
+        <option value="public">📢 Public Comments</option>
+        <option value="dm">💬 Private DM</option>
+        <option value="business">💼 Business / Collab</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Main Chat Window -->
+  <div class="main-chat">
+    <div class="messages-container" id="chatContainer">
+      <div class="message-row">
+        <div class="avatar assistant-avatar">AI</div>
+        <div class="message-content message-assistant">
+          Type your message or custom instructions below to generate options.
+        </div>
+      </div>
+    </div>
+
+    <!-- Single Bottom Input Area -->
+    <div class="input-container">
+      <div class="input-box">
+        <textarea id="userInput" placeholder="Send a message or type instructions..." rows="1" onkeydown="handleKeyDown(event)" oninput="autoResize(this)"></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let chatHistory = [];
+
+    function autoResize(textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = Math.min(textarea.scrollHeight, 160) + 'px';
+    }
+
+    function handleKeyDown(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    }
+
+    function clearChat() {
+      chatHistory = [];
+      const container = document.getElementById('chatContainer');
+      container.innerHTML = `
+        <div class="message-row">
+          <div class="avatar assistant-avatar">AI</div>
+          <div class="message-content message-assistant">
+            Chat cleared. Ready for your next message!
+          </div>
+        </div>
+      `;
+    }
+
+    async function sendMessage() {
+      const textarea = document.getElementById('userInput');
+      const message = textarea.value.trim();
+      if (!message) return;
+
+      const mode = document.getElementById('modeSelect').value;
+      const sendBtn = document.getElementById('sendBtn');
+
+      // Add user message to local history
+      chatHistory.push({ role: "user", content: message });
+
+      // Reset textarea
+      textarea.value = "";
+      textarea.style.height = '26px';
+      sendBtn.disabled = true;
+
+      renderChat();
+      appendLoadingState();
+
+      try {
+        const response = await fetch('/api/reply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: chatHistory, mode, override: message })
+        });
+
+        const data = await response.json();
+        removeLoadingState();
+
+        const replyContent = data.reply || data.error || "No response generated.";
+
+        // Push assistant response to history array
+        chatHistory.push({ role: "assistant", content: replyContent });
+        renderChat();
+
+      } catch (err) {
+        removeLoadingState();
+        chatHistory.push({ role: "assistant", content: "Error connecting to server. Please check deployment logs." });
+        renderChat();
+      } finally {
+        sendBtn.disabled = false;
+      }
+    }
+
+    function renderChat() {
+      const container = document.getElementById('chatContainer');
+      container.innerHTML = "";
+
+      chatHistory.forEach((msg) => {
+        const row = document.createElement('div');
+        row.className = 'message-row';
+
+        if (msg.role === 'user') {
+          row.innerHTML = `
+            <div class="avatar user-avatar">U</div>
+            <div class="message-content message-user">${escapeHtml(msg.content)}</div>
+          `;
+        } else {
+          row.innerHTML = `
+            <div class="avatar assistant-avatar">AI</div>
+            <div class="message-content message-assistant">${formatAssistantOutput(msg.content)}</div>
+          `;
+        }
+        container.appendChild(row);
+      });
+
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function appendLoadingState() {
+      const container = document.getElementById('chatContainer');
+      const loadingRow = document.createElement('div');
+      loadingRow.id = 'loadingRow';
+      loadingRow.className = 'message-row';
+      loadingRow.innerHTML = `
+        <div class="avatar assistant-avatar">AI</div>
+        <div class="message-content message-assistant" style="color: #ff80bf;">Generating options...</div>
+      `;
+      container.appendChild(loadingRow);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function removeLoadingState() {
+      const loadingRow = document.getElementById('loadingRow');
+      if (loadingRow) loadingRow.remove();
+    }
+
+    function formatAssistantOutput(text) {
+      const lines = text.split('\n');
+      let html = "";
+
+      lines.forEach(line => {
+        if (line.match(/^\([A-C]\)/i)) {
+          html += `<div class="option-card" onclick="copyToClipboard(this)">
+            ${escapeHtml(line)}
+            <span class="copy-hint">Click to Copy</span>
+          </div>`;
+        } else if (line.trim() !== "") {
+          html += `<div>${escapeHtml(line)}</div>`;
+        }
+      });
+
+      return html || escapeHtml(text);
+    }
+
+    function copyToClipboard(element) {
+      const text = element.innerText.replace("Click to Copy", "").trim();
+      navigator.clipboard.writeText(text);
+      const hint = element.querySelector('.copy-hint');
+      if (hint) {
+        hint.innerText = "Copied!";
+        setTimeout(() => hint.innerText = "Click to Copy", 2000);
+      }
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+  </script>
+</body>
+</html>
