@@ -70,7 +70,7 @@ const payloadMessages = [
                 // Fallbacks: If primary fails/lags, OpenRouter tries these in order
                 models: [
                     "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
-                    "sao10k/l3-8b-lunaris-special:free",
+                    "openrouter/free",
                     "cognitivecomputations/dolphin-mistral-24b-venice-edition"
                 ],
                 messages: payloadMessages,
