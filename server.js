@@ -68,11 +68,7 @@ const payloadMessages = [
                 // Primary model
                 model: "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
                 // Fallbacks: If primary fails/lags, OpenRouter tries these in order
-                models: [
-                    "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
-                    "openrouter/free",
-                    "cognitivecomputations/dolphin-mistral-24b-venice-edition"
-                ],
+                model:"cognitivecomputations/dolphin-mistral-24b-venice-edition",
                 messages: payloadMessages,
                 max_tokens: 400
             })
