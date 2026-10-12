@@ -66,7 +66,7 @@ const payloadMessages = [
             },
             body: JSON.stringify({
                 // Primary model
-                model: "cognitivecomputations/dolphin-mistral-24b-venice-edition",
+                model: "huihui-ai/llama-3.1-8b-instruct-abliterated",
                 messages: payloadMessages,
                 max_tokens: 400
             })
