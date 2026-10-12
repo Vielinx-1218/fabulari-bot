@@ -66,7 +66,7 @@ const payloadMessages = [
             },
             body: JSON.stringify({
                 // Primary model
-                model: "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
+                model: "cognitivecomputations/dolphin-mistral-24b-venice-edition",
                 messages: payloadMessages,
                 max_tokens: 400
             })
