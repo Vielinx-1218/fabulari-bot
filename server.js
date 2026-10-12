@@ -58,18 +58,22 @@ Use emojis (✨, 💖, 🔥, 🧱, 🍆, 🍒, 🍑, 💦, 🥵, 👅, 👀) org
 
     // --- STEP 1: TRY OPENROUTER (PRIMARY) ---
     try {
-        const openRouterResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                model: "meta-llama/llama-3.1-8b-instruct", // Using standard reliable OpenRouter model identifier
-                messages: payloadMessages,
-                max_tokens: 400
-            })
-        });
+  const openRouterResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      models: [
+        "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
+          "sao10k/l3-8b-lunaris-special:free",
+        "cognitivecomputations/dolphin-mistral-24b-venice-edition"
+      ],
+      messages: payloadMessages,
+      max_tokens: 400
+    })
+  });
 
         const openRouterData = await openRouterResponse.json();
 
