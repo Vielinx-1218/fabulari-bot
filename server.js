@@ -67,8 +67,6 @@ const payloadMessages = [
             body: JSON.stringify({
                 // Primary model
                 model: "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
-                // Fallbacks: If primary fails/lags, OpenRouter tries these in order
-                model:"cognitivecomputations/dolphin-mistral-24b-venice-edition",
                 messages: payloadMessages,
                 max_tokens: 400
             })
