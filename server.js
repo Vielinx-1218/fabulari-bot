@@ -105,10 +105,19 @@ app.post('/api/reply', async (req, res) => {
     });
   }
 
- 
+  // If active, proceed to handle the chat request
+  return handleChatRequest(req, res);
+});
 
-app.post('/api/chat', handleChatRequest);
-app.post('/api/reply', handleChatRequest);
+app.post('/api/chat', async (req, res) => {
+  if (!IS_SERVICE_ACTIVE) {
+    return res.status(503).json({ 
+      error: CUSTOM_ERROR_MESSAGE 
+    });
+  }
+
+  return handleChatRequest(req, res);
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
