@@ -93,6 +93,22 @@ const payloadMessages = [
     }
 }
 
+// ==========================================
+// 1. SERVICE STATUS & CUSTOM ERROR CONFIG
+// ==========================================
+const IS_SERVICE_ACTIVE = false; // Set to true when you want the chat to work
+const CUSTOM_ERROR_MESSAGE = "To continue using the website you can contact the admin! Thankyou!";
+
+app.post('/api/reply', async (req, res) => {
+  // If deactivated, immediately respond with your custom message
+  if (!IS_SERVICE_ACTIVE) {
+    return res.status(503).json({ 
+      error: CUSTOM_ERROR_MESSAGE 
+    });
+  }
+
+  // ... (rest of your original code remains unchanged)
+
 app.post('/api/chat', handleChatRequest);
 app.post('/api/reply', handleChatRequest);
 
